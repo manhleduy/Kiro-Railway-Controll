@@ -4,8 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/client"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -20,6 +19,7 @@ enum SeatStatus {
 
 enum TicketStatus {
   Open
+  Canceled
   Resolved
 }
 
@@ -31,23 +31,24 @@ enum OrderStatus {
 
 model Customer {
   customerId String     @id
-  fullname   String
+  fullname   String      
   email      String     @unique
   phone      String
   password   String
   rank       Int
+  point      Int        @default(0)
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  updatedAt  DateTime   @updatedAt @default(now())
   orders     Order[]
   feedbacks  Feedback[]
 }
 
 model Shift {
-  id        Int      @id @default(autoincrement())
+  shiftId   Int      @id @default(autoincrement())
   staffId   String
   startTime DateTime @db.Time()
   endTime   DateTime @db.Time()
-  staff     Staff    @relation(fields: [staffId], references: [staffId])
+  staff     Staff    @relation(fields: [staffId], references: [staffId], onDelete: Cascade)
 }
 
 model Staff {
@@ -58,7 +59,7 @@ model Staff {
   password  String
   role      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   orders    Order[]
   shifts    Shift[]
 }
@@ -69,7 +70,7 @@ model Payment {
   methodId  Int
   price     Float
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   method    Method   @relation(fields: [methodId], references: [methodId])
   order     Order?
 }
@@ -86,60 +87,60 @@ model Order {
   customerId String
   staffId    String?
   status     OrderStatus
-  paymentId  Int         @unique
+  paymentId  Int?        @unique
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  updatedAt  DateTime    @updatedAt @default(now())
   customer   Customer    @relation(fields: [customerId], references: [customerId], onDelete: Cascade)
   staff      Staff?      @relation(fields: [staffId], references: [staffId])
-  payment    Payment     @relation(fields: [paymentId], references: [paymentId])
+  payment    Payment?    @relation(fields: [paymentId], references: [paymentId])
   tickets    Ticket[]
 }
 
 model Ticket {
-  id        Int          @id @default(autoincrement())
+  ticketId  Int          @id @default(autoincrement())
   orderId   Int
   passCCCD  String
   passName  String
-  status    TicketStatus
-  seat_id   Int          @unique
+  status    TicketStatus @default(Open)
+  seatId    Int?          @unique
   createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  updatedAt DateTime     @updatedAt @default(now())
   order     Order        @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  seat      Seat         @relation(fields: [seat_id], references: [id])
+  seat      Seat?        @relation(fields: [seatId], references: [seatId])
 }
 
 model Seat {
-  id          Int        @id @default(autoincrement())
-  status      SeatStatus
+  seatId      Int        @id @default(autoincrement())
+  status      SeatStatus @default(Available)
   tripId      Int
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  seatClassId Int
-  seatClass   SeatClass  @relation(fields: [seatClassId], references: [id])
+  updatedAt   DateTime   @updatedAt @default(now())
+  seatClassId Int         
+  seatClass   SeatClass  @relation(fields: [seatClassId], references: [seatClassId])
   ticket      Ticket?
-  trip        Trip       @relation(fields: [tripId], references: [id])
+  trip        Trip       @relation(fields: [tripId], references: [tripId], onDelete: Cascade)
 }
 
 model Trip {
-  id          Int      @id @default(autoincrement())
+  tripId      Int      @id @default(autoincrement())
   track       String
   arrivalDate DateTime
   seats       Seat[]
 }
 
 model SeatClass {
-  id    Int    @id @default(autoincrement())
-  name  String
-  price Float
-  seats Seat[]
+  seatClassId    Int    @id @default(autoincrement())
+  name           String
+  price          Float
+  seats          Seat[]
 }
 
 model Feedback {
-  id         Int      @id @default(autoincrement())
+  feedbackId Int      @id @default(autoincrement())
   customerId String
   content    String
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime @updatedAt @default(now())
   customer   Customer @relation(fields: [customerId], references: [customerId], onDelete: Cascade)
 }
 
