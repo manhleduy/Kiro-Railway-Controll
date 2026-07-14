@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SeatStatus {
+  Available
+  Booked
+  Unavailable
+}
+
+enum TicketStatus {
+  Open
+  Resolved
+}
+
+enum OrderStatus {
+  Pending
+  Confirmed
+  Denied
+}
+
+model Customer {
+  customerId String     @id
+  fullname   String
+  email      String     @unique
+  phone      String
+  password   String
+  rank       Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  orders     Order[]
+  feedbacks  Feedback[]
+}
+
+model Shift {
+  id        Int      @id @default(autoincrement())
+  staffId   String
+  startTime DateTime @db.Time()
+  endTime   DateTime @db.Time()
+  staff     Staff    @relation(fields: [staffId], references: [staffId])
+}
+
+model Staff {
+  staffId   String   @id
+  fullname  String
+  email     String   @unique
+  phone     String
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+  shifts    Shift[]
+}
+
+model Payment {
+  paymentId Int      @id @default(autoincrement())
+  orderId   Int
+  methodId  Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  method    Method   @relation(fields: [methodId], references: [methodId])
+  order     Order?
+}
+
+model Method {
+  methodId    Int       @id @default(autoincrement())
+  name        String
+  description String
+  Payments    Payment[]
+}
+
+model Order {
+  orderId    Int         @id @default(autoincrement())
+  customerId String
+  staffId    String?
+  status     OrderStatus
+  paymentId  Int         @unique
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  customer   Customer    @relation(fields: [customerId], references: [customerId], onDelete: Cascade)
+  staff      Staff?      @relation(fields: [staffId], references: [staffId])
+  payment    Payment     @relation(fields: [paymentId], references: [paymentId])
+  tickets    Ticket[]
+}
+
+model Ticket {
+  id        Int          @id @default(autoincrement())
+  orderId   Int
+  passCCCD  String
+  passName  String
+  status    TicketStatus
+  seat_id   Int          @unique
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  order     Order        @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  seat      Seat         @relation(fields: [seat_id], references: [id])
+}
+
+model Seat {
+  id          Int        @id @default(autoincrement())
+  status      SeatStatus
+  tripId      Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  seatClassId Int
+  seatClass   SeatClass  @relation(fields: [seatClassId], references: [id])
+  ticket      Ticket?
+  trip        Trip       @relation(fields: [tripId], references: [id])
+}
+
+model Trip {
+  id          Int      @id @default(autoincrement())
+  track       String
+  arrivalDate DateTime
+  seats       Seat[]
+}
+
+model SeatClass {
+  id    Int    @id @default(autoincrement())
+  name  String
+  price Float
+  seats Seat[]
+}
+
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  customerId String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  customer   Customer @relation(fields: [customerId], references: [customerId], onDelete: Cascade)
+}
+
+model Station {
+  stationId     String    @id
+  name          String
+  location      String
+  nextStations  Station[] @relation("NextStations")
+  nextStationOf Station[] @relation("NextStations")
+}
