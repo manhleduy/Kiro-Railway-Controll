@@ -1,0 +1,237 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthCustomerProfile {
+  customerId: String!
+  fullname: String!
+  email: String!
+  phone: String!
+  rank: Float!
+  point: Float!
+}
+
+type AuthPayload {
+  token: String!
+  user: AuthUser!
+}
+
+union AuthUser = AuthCustomerProfile | AuthStaffProfile
+
+type AuthStaffProfile {
+  staffId: String!
+  fullname: String!
+  email: String!
+  phone: String!
+  role: String!
+}
+
+type StaffProfile {
+  staffId: String!
+  fullname: String!
+  email: String!
+  phone: String!
+  role: String!
+}
+
+type SeatClassType {
+  seatClassId: Int!
+  name: String!
+  price: Float!
+}
+
+type SeatType {
+  seatId: Int!
+  status: SeatStatus!
+  seatClass: SeatClassType!
+}
+
+enum SeatStatus {
+  Available
+  Booked
+  Unavailable
+}
+
+type TripType {
+  tripId: Int!
+  track: String!
+  arrivalDate: DateTime!
+  seats: [SeatType!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TicketType {
+  ticketId: Int!
+  passCCCD: String!
+  passName: String!
+  status: TicketStatus!
+  seatId: Int
+  seat: SeatType
+  orderId: Int!
+}
+
+enum TicketStatus {
+  Open
+  Canceled
+  Resolved
+}
+
+type MethodType {
+  methodId: Int!
+  name: String!
+  description: String!
+}
+
+type PaymentType {
+  paymentId: Int!
+  price: Float!
+  method: MethodType!
+}
+
+type OrderType {
+  orderId: Int!
+  status: OrderStatus!
+  createdAt: DateTime!
+  staffId: String
+  customer: AuthCustomerProfile!
+  tickets: [TicketType!]!
+  payment: PaymentType
+}
+
+enum OrderStatus {
+  Pending
+  Confirmed
+  Denied
+}
+
+type StationType {
+  stationId: String!
+  name: String!
+  location: String!
+  nextStations: [StationType!]!
+}
+
+type ShiftType {
+  shiftId: Int!
+  staffId: String!
+  startTime: DateTime!
+  endTime: DateTime!
+}
+
+type FeedbackType {
+  feedbackId: Int!
+  customerId: String!
+  content: String!
+  createdAt: DateTime!
+}
+
+type Query {
+  customer(id: String!): AuthCustomerProfile!
+  staff(id: String!): StaffProfile!
+  trips(track: String): [TripType!]!
+  trip(id: Int!): TripType
+  seatClasses: [SeatClassType!]!
+  myOrders(customerId: String!): [OrderType!]!
+  pendingOrders: [OrderType!]!
+  tickets(orderId: Int, status: TicketStatus): [TicketType!]!
+  stations: [StationType!]!
+  shifts(staffId: String!): [ShiftType!]!
+  feedbacks(customerId: String!): [FeedbackType!]!
+  methods: [MethodType!]!
+}
+
+type Mutation {
+  registerCustomer(input: RegisterCustomerInput!): AuthPayload!
+  loginCustomer(customerId: String!, email: String!, password: String!): AuthPayload!
+  loginStaff(email: String!, password: String!): AuthPayload!
+  updateCustomer(id: String!, input: UpdateCustomerInput!): AuthCustomerProfile!
+  changePassword(id: String!, input: ChangePasswordInput!): Boolean!
+  createTrip(input: CreateTripInput!): TripType!
+  deleteTrip(id: Int!): Boolean!
+  createSeat(input: CreateSeatInput!): SeatType!
+  createSeatClass(input: CreateSeatClassInput!): SeatClassType!
+  updateSeatClass(id: Int!, input: UpdateSeatClassInput!): SeatClassType!
+  createOrder(input: CreateOrderInput!): OrderType!
+  approveOrder(orderId: Int!, status: String!, staffId: String!): OrderType!
+  cancelTicket(seatId: Int!): TicketType!
+  changeTicket(ticketId: Int!, newSeatId: Int!, passCCCD: String!, passName: String!): TicketType!
+  createStation(input: CreateStationInput!): StationType!
+  updateStation(id: String!, input: UpdateStationInput!): StationType!
+  deleteStation(id: String!): Boolean!
+  createShift(input: CreateShiftInput!): ShiftType!
+  deleteShift(shiftId: Int!): Boolean!
+  createFeedback(customerId: String!, content: String!): FeedbackType!
+}
+
+input RegisterCustomerInput {
+  customerId: String!
+  fullname: String!
+  email: String!
+  phone: String!
+  password: String!
+}
+
+input UpdateCustomerInput {
+  fullname: String
+  phone: String
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+input CreateTripInput {
+  track: String!
+  arrivalDate: DateTime!
+}
+
+input CreateSeatInput {
+  tripId: Int!
+  seatClassId: Int!
+}
+
+input CreateSeatClassInput {
+  name: String!
+  price: Float!
+}
+
+input UpdateSeatClassInput {
+  name: String
+  price: Float
+}
+
+input CreateOrderInput {
+  customerId: String!
+  methodId: Int!
+  tickets: [TicketInput!]!
+}
+
+input TicketInput {
+  seatId: Int!
+  passName: String!
+  passCCCD: String!
+}
+
+input CreateStationInput {
+  stationId: String!
+  name: String!
+  location: String!
+  nextStationIds: [String!]
+}
+
+input UpdateStationInput {
+  name: String
+  location: String
+  nextStationIds: [String!]
+}
+
+input CreateShiftInput {
+  staffId: String!
+  startTime: DateTime!
+  endTime: DateTime!
+}

@@ -26,6 +26,7 @@ import { MethodsModule } from './methods/methods.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true,
+      context: ({ req }: { req: Request }) => ({ req }),
     }),
     JwtModule.register({
       global: true,

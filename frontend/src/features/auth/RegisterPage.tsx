@@ -7,6 +7,7 @@ import { Train } from 'lucide-react';
 import { registerCustomer } from '@/services';
 
 const schema = z.object({
+  customerId: z.string().min(1, 'id is required'),
   fullname: z.string().min(1, 'Full name is required'),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(9, 'Phone must be at least 9 characters'),
@@ -16,6 +17,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export function RegisterPage() {
+  
   const navigate = useNavigate();
 
   const {
@@ -27,6 +29,7 @@ export function RegisterPage() {
   async function onSubmit(data: FormData) {
     try {
       await registerCustomer(
+        data.customerId,
         data.fullname,
         data.email,
         data.phone,
@@ -53,6 +56,22 @@ export function RegisterPage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              your id
+            </label>
+            <input
+              {...register('customerId')}
+              type="text"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Nguyen Van A"
+            />
+            {errors.customerId && (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.customerId.message}
+              </p>
+            )}
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Full Name

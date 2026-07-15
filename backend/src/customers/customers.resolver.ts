@@ -1,26 +1,26 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CustomersService } from './customers.service';
-import { CustomerProfile } from '../auth/dto/auth-payload-staff.type';
+import { AuthCustomerProfile } from '../auth/dto/auth-payload-customer.type';
 import { UpdateCustomerInput } from './dto/update-customer.input';
 import { ChangePasswordInput } from './dto/change-password.input';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Resolver(() => CustomerProfile)
+@Resolver(() => AuthCustomerProfile)
 export class CustomersResolver {
   constructor(private readonly customersService: CustomersService) {}
 
-  @Query(() => CustomerProfile, { name: 'customer' })
-  getCustomer(@Args('id') id: string): Promise<CustomerProfile> {
+  @Query(() => AuthCustomerProfile, { name: 'customer' })
+  getCustomer(@Args('id') id: string): Promise<AuthCustomerProfile> {
     return this.customersService.findById(id);
   }
 
-  @Mutation(() => CustomerProfile)
+  @Mutation(() => AuthCustomerProfile)
   @UseGuards(JwtAuthGuard)
   updateCustomer(
     @Args('id') id: string,
     @Args('input') input: UpdateCustomerInput,
-  ): Promise<CustomerProfile> {
+  ): Promise<AuthCustomerProfile> {
     return this.customersService.updateCustomer(id, input);
   }
 

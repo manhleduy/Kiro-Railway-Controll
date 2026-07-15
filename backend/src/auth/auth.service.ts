@@ -19,15 +19,16 @@ export class AuthService {
   ) {}
 
   async registerCustomer(input: RegisterCustomerInput): Promise<AuthPayload> {
-    const { fullname, email, phone, password } = input;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const {customerId, fullname, email, phone, password } = input;
+    
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     let customer: AuthCustomerProfile;
     try {
+      
       const created = await this.prisma.customer.create({
         data: {
-          customerId: this.generateId(),
+          customerId,
           fullname,
           email,
           phone,
@@ -36,6 +37,7 @@ export class AuthService {
           point: 0,
         },
       });
+      
 
       customer = {
         customerId: created.customerId,
@@ -46,6 +48,7 @@ export class AuthService {
         point: created.point,
       };
     } catch (err: unknown) {
+      
       if (
         err instanceof Error &&
         'code' in err &&
@@ -66,9 +69,9 @@ export class AuthService {
     return { token, user: customer };
   }
 
-  async loginCustomer(email: string, password: string): Promise<AuthPayload> {
+  async loginCustomer(customerId: string,email: string, password: string): Promise<AuthPayload> {
     const customer = await this.prisma.customer.findUnique({
-      where: { email },
+      where: { email, customerId },
     });
 
     if (!customer) {
@@ -127,9 +130,5 @@ export class AuthService {
     return { token, user: profile };
   }
 
-  private generateId(): string {
-    return `C${Date.now()}${Math.floor(Math.random() * 10000)
-      .toString()
-      .padStart(4, '0')}`;
-  }
+  
 }

@@ -9,6 +9,7 @@ import { useAuthDispatch } from '@/hooks';
 import type { CustomerProfile } from '@/types';
 
 const schema = z.object({
+  customerId: z.string().min(1, 'user id is required'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(1, 'Password is required'),
 });
@@ -27,7 +28,7 @@ export function LoginCustomerPage() {
 
   async function onSubmit(data: FormData) {
     try {
-      const payload = await loginCustomer(data.email, data.password);
+      const payload = await loginCustomer(data.customerId, data.email, data.password);
       login({
         token: payload.token,
         role: 'customer',
@@ -53,6 +54,22 @@ export function LoginCustomerPage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              {...register('customerId')}
+              type="customerId"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="your id"
+            />
+            {errors.customerId && (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.customerId.message}
+              </p>
+            )}
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email

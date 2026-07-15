@@ -15,6 +15,7 @@ export function OrdersListPage() {
 
   useEffect(() => {
     const customerId = (auth.user as CustomerProfile | null)?.customerId;
+  
     if (!customerId) return;
     myOrders(customerId)
       .then((data: Order[]) => {

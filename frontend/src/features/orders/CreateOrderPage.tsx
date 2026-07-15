@@ -22,7 +22,7 @@ export function CreateOrderPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const auth = useAuthState();
-
+  
   const seatIds = (searchParams.get('seats') ?? '')
     .split(',')
     .filter(Boolean)

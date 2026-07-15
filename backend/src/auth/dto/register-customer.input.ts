@@ -5,6 +5,10 @@ import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 export class RegisterCustomerInput {
   @Field()
   @IsNotEmpty()
+  customerId: string
+
+  @Field()
+  @IsNotEmpty()
   fullname: string;
 
   @Field()

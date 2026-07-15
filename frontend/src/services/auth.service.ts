@@ -4,7 +4,7 @@ import type { AuthPayload } from '@/types';
 const USER_FRAGMENT = `
   token
   user {
-    ... on CustomerProfile {
+    ... on AuthCustomerProfile {
       customerId
       fullname
       email
@@ -12,7 +12,7 @@ const USER_FRAGMENT = `
       rank
       point
     }
-    ... on StaffProfile {
+    ... on AuthStaffProfile {
       staffId
       fullname
       email
@@ -23,32 +23,37 @@ const USER_FRAGMENT = `
 `;
 
 export async function registerCustomer(
+  customerId: string,
   fullname: string,
   email: string,
   phone: string,
   password: string,
 ): Promise<AuthPayload> {
-  return gql<{ registerCustomer: AuthPayload }>(
-    `mutation RegisterCustomer($fullname: String!, $email: String!, $phone: String!, $password: String!) {
-       registerCustomer(input: { fullname: $fullname, email: $email, phone: $phone, password: $password }) {
+  
+  const value= gql<{ registerCustomer: AuthPayload }>(
+    `mutation RegisterCustomer($customerId: String!,$fullname: String!, $email: String!, $phone: String!, $password: String!) {
+       registerCustomer(input: {customerId: $customerId, fullname: $fullname, email: $email, phone: $phone, password: $password }) {
          ${USER_FRAGMENT}
        }
      }`,
-    { fullname, email, phone, password },
-  ).then((d) => d.registerCustomer);
+    {customerId, fullname, email, phone, password },
+  ).then((d) => d.registerCustomer)
+  console.log(value)
+  return value;
 }
 
 export async function loginCustomer(
+  customerId: string,
   email: string,
   password: string,
 ): Promise<AuthPayload> {
   return gql<{ loginCustomer: AuthPayload }>(
-    `mutation LoginCustomer($email: String!, $password: String!) {
-       loginCustomer(email: $email, password: $password) {
+    `mutation LoginCustomer($customerId: String!, $email: String!, $password: String!) {
+       loginCustomer(customerId: $customerId, email: $email, password: $password) {
          ${USER_FRAGMENT}
        }
      }`,
-    { email, password },
+    {customerId, email, password },
   ).then((d) => d.loginCustomer);
 }
 

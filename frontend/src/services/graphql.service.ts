@@ -24,6 +24,7 @@ export async function gql<T>(
     errors?: { message: string }[];
   }>('/graphql', { query, variables });
   if (data.errors?.length) {
+  
     throw new Error(data.errors[0].message);
   }
   return data.data;

@@ -52,7 +52,13 @@ npm run format
 npx prisma migrate dev        # create and apply a migration
 npx prisma migrate deploy     # apply pending migrations
 npx prisma generate           # regenerate the Prisma client
-npx prisma studio             # open Prisma Studio GUI
+npx prisma studio   
+
+# Generate new module
+nest generate module module-name
+# Generate a new service
+nest generate service service-name
+
 ```
 
 ### Frontend (`cd frontend`)
@@ -77,3 +83,24 @@ npm run lint
 - NestJS compiles to `backend/dist/`; source maps are enabled.
 - GraphQL playground is enabled (`playground: true`) — available at `/graphql` in dev.
 - Prisma schema is at `backend/prisma/schema.prisma`; generated client is at `backend/src/generated/client`.
+
+## Strict Directory & File rules
+- **Component PLacement**:
+    - Shared/Generic UI components: `frontend/src/components/ui/`
+    - Custom Hook: `frontend/src/hooks`
+    - Styling files: `frontend/src/styles
+    - reusable utility functions: 'frontend/src/utils
+    - Api calls and external interfaction: `frontend/src/services`
+    - Page for this project: `frontend/src/pages`
+    - manage global state: `frontend/src/redux`
+
+- **Backend Files Arragement**
+    - root module: app.module.ts
+    - features specific modules : `backend/src/modules
+    - Decorators, filters, guards, interceptors, pipes: `backend/src/commons
+    - Configuration files: `backend/src/configs
+    - utiilty: functions: `backend/src/ utils
+    - 
+
+## Agent Operational Guardrails (The "Laws")
+1. **Plan Before Writing**: Before editing or creating any file, you MUST print a "File Impact Plan" outlining which files you intend to create or modify. Ask the user for confirmation.

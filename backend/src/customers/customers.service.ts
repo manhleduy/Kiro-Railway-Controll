@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CustomerProfile } from '../auth/dto/auth-payload-staff.type';
+import {  AuthCustomerProfile } from '../auth/dto/auth-payload-customer.type';
 import { UpdateCustomerInput } from './dto/update-customer.input';
 import { ChangePasswordInput } from './dto/change-password.input';
 
@@ -13,7 +13,7 @@ import { ChangePasswordInput } from './dto/change-password.input';
 export class CustomersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: string): Promise<CustomerProfile> {
+  async findById(id: string): Promise<AuthCustomerProfile> {
     const customer = await this.prisma.customer.findUnique({
       where: { customerId: id },
       select: {
@@ -36,7 +36,7 @@ export class CustomersService {
   async updateCustomer(
     id: string,
     input: UpdateCustomerInput,
-  ): Promise<CustomerProfile> {
+  ): Promise<AuthCustomerProfile> {
     const data: { fullname?: string; phone?: string } = {};
     if (input.fullname !== undefined) data.fullname = input.fullname;
     if (input.phone !== undefined) data.phone = input.phone;
