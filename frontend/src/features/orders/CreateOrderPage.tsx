@@ -22,7 +22,7 @@ export function CreateOrderPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const auth = useAuthState();
-  
+
   const seatIds = (searchParams.get('seats') ?? '')
     .split(',')
     .filter(Boolean)
@@ -73,9 +73,10 @@ export function CreateOrderPage() {
         passName: data.passengers[i].passName,
         passCCCD: data.passengers[i].passCCCD,
       }));
+      
       const order = await createOrder(
         customerId,
-        Number(data.methodId),
+        parseInt(data.methodId),
         tickets,
       );
       toast.success('Order created successfully!');

@@ -19,12 +19,14 @@ export class OrdersResolver {
   @Query(() => [OrderType], { name: 'pendingOrders' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   pendingOrders(): Promise<OrderType[]> {
+
     return this.ordersService.pendingOrders();
   }
 
   @Mutation(() => OrderType)
   @UseGuards(JwtAuthGuard)
   createOrder(@Args('input') input: CreateOrderInput): Promise<OrderType> {
+    
     return this.ordersService.createOrder(input);
   }
 

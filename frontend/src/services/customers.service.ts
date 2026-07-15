@@ -1,6 +1,15 @@
 import { gql } from './graphql.service';
 import type { CustomerProfile } from '@/types';
 
+export interface CustomerStats {
+  totalOrders: number;
+  latestOrder: { orderId: number; createdAt: string; status: string } | null;
+  avgPayment: number;
+  point: number;
+  rank: number;
+  monthlyActivity: { month: number; orderCount: number; ticketCount: number }[];
+}
+
 export async function getCustomer(customerId: string): Promise<CustomerProfile> {
   return gql<{ customer: CustomerProfile }>(
     `query Customer($customerId: String!) {
@@ -15,6 +24,25 @@ export async function getCustomer(customerId: string): Promise<CustomerProfile> 
      }`,
     { customerId },
   ).then((d) => d.customer);
+}
+
+export async function getCustomerStats(
+  customerId: string,
+  year: number,
+): Promise<CustomerStats> {
+  return gql<{ customerStats: CustomerStats }>(
+    `query CustomerStats($id: String!, $year: Int!) {
+       customerStats(id: $id, year: $year) {
+         totalOrders
+         latestOrder { orderId createdAt status }
+         avgPayment
+         point
+         rank
+         monthlyActivity { month orderCount ticketCount }
+       }
+     }`,
+    { id: customerId, year },
+  ).then((d) => d.customerStats);
 }
 
 export async function updateCustomer(

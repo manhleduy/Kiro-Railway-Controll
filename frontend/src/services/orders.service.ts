@@ -68,9 +68,10 @@ export async function createOrder(
   methodId: number,
   tickets: TicketInput[],
 ): Promise<Order> {
+  
   return gql<{ createOrder: Order }>(
     `mutation CreateOrder($customerId: String!, $methodId: Int!, $tickets: [TicketInput!]!) {
-       createOrder(input: { customerId: $customerId, methodId: $methodId, tickets: $tickets }) {
+       createOrder(input: {customerId: $customerId, methodId: $methodId, tickets: $tickets }) {
          ${ORDER_FIELDS}
        }
      }`,

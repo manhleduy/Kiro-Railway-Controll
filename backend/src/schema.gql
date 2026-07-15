@@ -26,6 +26,38 @@ type AuthStaffProfile {
   role: String!
 }
 
+type LatestOrderSummary {
+  orderId: Int!
+  createdAt: DateTime!
+  status: OrderStatus!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum OrderStatus {
+  Pending
+  Confirmed
+  Denied
+}
+
+type MonthlyActivityType {
+  month: Int!
+  orderCount: Int!
+  ticketCount: Int!
+}
+
+type CustomerStatsType {
+  totalOrders: Int!
+  latestOrder: LatestOrderSummary
+  avgPayment: Float!
+  point: Int!
+  rank: Int!
+  monthlyActivity: [MonthlyActivityType!]!
+}
+
 type StaffProfile {
   staffId: String!
   fullname: String!
@@ -58,11 +90,6 @@ type TripType {
   arrivalDate: DateTime!
   seats: [SeatType!]!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type TicketType {
   ticketId: Int!
@@ -102,12 +129,6 @@ type OrderType {
   payment: PaymentType
 }
 
-enum OrderStatus {
-  Pending
-  Confirmed
-  Denied
-}
-
 type StationType {
   stationId: String!
   name: String!
@@ -131,6 +152,7 @@ type FeedbackType {
 
 type Query {
   customer(id: String!): AuthCustomerProfile!
+  customerStats(id: String!, year: Int!): CustomerStatsType!
   staff(id: String!): StaffProfile!
   trips(track: String): [TripType!]!
   trip(id: Int!): TripType

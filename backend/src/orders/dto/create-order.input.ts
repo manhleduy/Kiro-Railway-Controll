@@ -1,5 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsNotEmpty, ArrayMinSize } from 'class-validator';
+import { IsNotEmpty, ArrayMinSize, IsInt } from 'class-validator';
 import { TicketInput } from './ticket-input.input';
 
 @InputType()
@@ -9,7 +9,9 @@ export class CreateOrderInput {
   customerId: string;
 
   @Field(() => Int)
+  @IsInt()
   methodId: number;
+
 
   @Field(() => [TicketInput])
   @ArrayMinSize(1)

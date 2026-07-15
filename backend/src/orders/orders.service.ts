@@ -28,23 +28,25 @@ export class OrdersService {
 
   async createOrder(input: CreateOrderInput): Promise<OrderType> {
     const { customerId, methodId, tickets } = input;
-
+    console.log(input)
     const ticketsJson = tickets.map((t: TicketInput) => ({
       seatId: t.seatId,
       passName: t.passName,
       passCCCD: t.passCCCD,
     }));
-
+    
     try {
+      const ticketsJsonString =await JSON.stringify(ticketsJson);
+
       await this.prisma.$executeRaw`
-        DO $$
-        DECLARE
-          v_json_data JSONB := ${JSON.stringify(ticketsJson)}::jsonb;
-        BEGIN
-          CALL p_make_order(${customerId}::varchar, ${methodId}::int, v_json_data);
-        END $$;
+        CALL p_make_order(
+          ${customerId}::varchar, 
+          ${methodId}::int, 
+          ${ticketsJsonString}::jsonb
+        );
       `;
     } catch (err: unknown) {
+      console.log(err)
       const msg =
         err instanceof Error ? err.message : 'Order creation failed';
       throw new BadRequestException(msg);

@@ -406,6 +406,19 @@ Full-stack implementation of the Railway Control System — a NestJS 11 GraphQL 
     - Separate password change section using `changePassword` mutation
     - _Requirements: 17.1, 17.2, 17.4, 17.5_
 
+  - [ ] 20.8 Add stats blocks and activity chart to CustomerProfilePage
+    - **Backend:** Add `customerStats(id, year)` query to `CustomersModule`
+      - Return `CustomerStatsType` containing: `totalOrders`, `latestOrder` (orderId + createdAt + status), `avgPayment` (average price across all payments for this customer), `point`, `rank`
+      - Return `monthlyActivity: MonthlyActivityType[]` — array of `{ month, orderCount, ticketCount }` for the given year, one entry per month (1–12), using Prisma raw aggregation over `Order` and `Ticket` tables grouped by month of `createdAt`
+      - Protect with `JwtAuthGuard`
+    - **Frontend service:** Add `getCustomerStats(customerId, year)` to `customers.service.ts`
+    - **Frontend page:** Add to `CustomerProfilePage.tsx`:
+      - Four stat blocks: Total Orders, Latest Order (ID + status Badge), Average Payment (formatted currency), Loyalty (rank + points with star icon)
+      - A `year` selector (current year default, allow selecting past years)
+      - A Recharts `BarChart` with two bars per month: orders (blue) and tickets (indigo), X-axis = month name abbreviation, Y-axis = count
+      - Use `recharts` — already installed; no new packages needed
+    - _Requirements: Product spec §5 Customer Profile_
+
 
 - [ ] 21. Frontend staff pages
   - [~] 21.1 Implement StaffOrdersPage (pending approvals)
