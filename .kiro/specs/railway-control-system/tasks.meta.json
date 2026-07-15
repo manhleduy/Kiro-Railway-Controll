@@ -1,0 +1,598 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "0. Install required backend packages": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059111964
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059133670
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059310373
+      }
+    ],
+    "1.1 Wire PrismaService and PrismaModule": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112125
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059137356
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059311142
+      }
+    ],
+    "1.2 Implement JWT utilities and guards": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112231
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059138182
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059312084
+      }
+    ],
+    "2.1 Implement AuthModule scaffolding and DTOs": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112383
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059316868
+      }
+    ],
+    "2.2 Implement AuthService (register + login logic)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112483
+      },
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059552323
+      }
+    ],
+    "2.7 Implement AuthResolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112675
+      }
+    ],
+    "3.1 Implement CustomersModule, DTOs, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112786
+      }
+    ],
+    "4.1 Implement StaffModule, DTOs, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059112930
+      },
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059555923
+      }
+    ],
+    "5.1 Implement SeatClassesModule, DTOs, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113031
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059317382
+      }
+    ],
+    "6.1 Implement TripsModule, DTOs, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113134
+      },
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059559683
+      }
+    ],
+    "7.1 Implement SeatsModule, DTO, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113440
+      },
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059563765
+      }
+    ],
+    "8.1 Implement OrdersModule, DTOs, and GraphQL types": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113574
+      },
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059567617
+      }
+    ],
+    "8.2 Implement OrdersService.createOrder": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113651
+      }
+    ],
+    "8.4 Implement OrdersService.myOrders and OrdersService.pendingOrders": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113909
+      }
+    ],
+    "8.7 Implement OrdersService.approveOrder and OrdersResolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059113975
+      }
+    ],
+    "9.1 Implement TicketsModule, DTOs, and GraphQL types": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114046
+      }
+    ],
+    "9.3 Implement TicketsService.cancelTicket": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114128
+      }
+    ],
+    "9.5 Implement TicketsService.changeTicket": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114289
+      }
+    ],
+    "9.7 Wire cancelTicket and changeTicket mutations in TicketsResolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114459
+      }
+    ],
+    "10.1 Implement StationsModule, DTOs, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114593
+      }
+    ],
+    "11.1 Implement ShiftsModule, DTOs, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114836
+      }
+    ],
+    "12.1 Implement FeedbackModule, DTO, and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114903
+      }
+    ],
+    "13.1 Implement MethodsModule and resolver": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059114974
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059318119
+      }
+    ],
+    "14. Backend checkpoint — wire all modules into AppModule and verify build": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059115171
+      }
+    ],
+    "15.1 Configure Vite, path aliases, and global types": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059115256
+      },
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059319018
+      }
+    ],
+    "15.2 Implement Redux store and auth slice": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059115342
+      }
+    ],
+    "15.4 Implement Axios GraphQL service layer": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059115795
+      }
+    ],
+    "16.1 Implement all feature service files": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116017
+      }
+    ],
+    "17.1 Implement route guards and layouts": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116081
+      }
+    ],
+    "17.2 Wire React Router DOM 7 route tree in App.tsx": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116147
+      }
+    ],
+    "18.1 Implement shared UI components": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116220
+      }
+    ],
+    "19.1 Implement LoginCustomerPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116594
+      }
+    ],
+    "19.2 Implement LoginStaffPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116741
+      }
+    ],
+    "19.3 Implement RegisterPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059116837
+      }
+    ],
+    "20.1 Implement TripsListPage (customer)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059117145
+      }
+    ],
+    "20.2 Implement TripDetailPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059117421
+      }
+    ],
+    "20.3 Implement CreateOrderPage (seat selection + passenger form)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059117568
+      }
+    ],
+    "20.4 Implement OrdersListPage (customer)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059117728
+      }
+    ],
+    "20.5 Implement OrderDetailPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059117827
+      }
+    ],
+    "20.6 Implement FeedbackPage (customer)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059117945
+      }
+    ],
+    "20.7 Implement CustomerProfilePage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118182
+      }
+    ],
+    "21.1 Implement StaffOrdersPage (pending approvals)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118417
+      }
+    ],
+    "21.2 Implement TicketsPage (staff)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118554
+      }
+    ],
+    "21.3 Implement TripsListPage (staff view with create/delete)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118670
+      }
+    ],
+    "21.4 Implement StationsPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118796
+      }
+    ],
+    "21.5 Implement ShiftsPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118900
+      }
+    ],
+    "21.6 Implement SeatClassesPage": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059118968
+      }
+    ],
+    "22. Final checkpoint — verify full build (backend + frontend)": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059119051
+      }
+    ],
+    "1. Backend foundation — PrismaModule, AppModule, auth utilities": [
+      {
+        "executionId": "4c3348ee-849c-48b5-ab7b-f130a74a1016",
+        "chatSessionId": "sess_fa218bde-e53f-4c47-abb9-ad8d7398c20e",
+        "timestamp": 1784059312191
+      }
+    ],
+    "2.3 Write property test for customer registration defaults (Property 1)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059534918
+      }
+    ],
+    "2.4 Write property test for password length boundary (Property 2)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535064
+      }
+    ],
+    "2.5 Write property test for customer login round-trip (Property 3)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535156
+      }
+    ],
+    "2.6 Write property test for staff login round-trip (Property 4)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535263
+      }
+    ],
+    "3.2 Write property test for customer profile never exposes password (Property 23)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535359
+      }
+    ],
+    "3.3 Write property test for profile update does not change password (Property 24)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535453
+      }
+    ],
+    "5.2 Write property test for SeatClass price boundary (Property 21)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535546
+      }
+    ],
+    "6.2 Write property test for trip query nested structure (Property 5)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535653
+      }
+    ],
+    "6.3 Write property test for track filter correctness (Property 6)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535761
+      }
+    ],
+    "6.4 Write property test for trip cascade deletion (Property 22)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535841
+      }
+    ],
+    "8.3 Write property test for order creation stored procedure invocation (Property 7)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059535950
+      }
+    ],
+    "8.5 Write property test for customer orders ownership filter (Property 8)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536036
+      }
+    ],
+    "8.6 Write property test for pending orders access control (Property 11)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536120
+      }
+    ],
+    "8.8 Write property test for order approval stamps staffId (Property 12)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536247
+      }
+    ],
+    "9.2 Write property test for ticket list filter exclusivity (Property 13)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536357
+      }
+    ],
+    "9.4 Write property test for ticket cancellation delegates to stored procedure (Property 9)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536453
+      }
+    ],
+    "9.6 Write property test for ticket change delegates to stored procedure (Property 10)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536544
+      }
+    ],
+    "10.2 Write property test for station query includes nextStations (Property 16)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536639
+      }
+    ],
+    "10.3 Write property test for station nextStations replacement (Property 17)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536741
+      }
+    ],
+    "10.4 Write property test for station deletion removes directed links (Property 18)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536832
+      }
+    ],
+    "11.2 Write property test for shift ownership filter (Property 14)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059536966
+      }
+    ],
+    "11.3 Write property test for shift deletion removes from list (Property 15)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059537085
+      }
+    ],
+    "12.2 Write property test for feedback empty content rejected (Property 19)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059537189
+      }
+    ],
+    "12.3 Write property test for feedback ownership and ordering (Property 20)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059537279
+      }
+    ],
+    "15.3 Write Vitest property test for auth state hydration round-trip (Property 25)": [
+      {
+        "executionId": "c1670da1-ae4e-4177-96e0-538fbf92d572",
+        "chatSessionId": "sess_7b8b3988-510a-482a-8873-015ab835134a",
+        "timestamp": 1784059537400
+      }
+    ]
+  }
+}
