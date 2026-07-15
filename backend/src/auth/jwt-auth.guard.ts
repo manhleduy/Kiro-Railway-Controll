@@ -12,6 +12,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   // JWT is stateless — skip Passport's session logIn() call
   handleRequest<TUser>(err: Error | null, user: TUser): TUser {
+    
     if (err || !user) {
       throw err || new Error('Unauthorized');
     }
