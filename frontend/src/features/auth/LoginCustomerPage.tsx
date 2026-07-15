@@ -123,6 +123,14 @@ export function LoginCustomerPage() {
             </Link>
           </p>
           <p className="text-sm text-gray-600">
+            <Link
+              to="/forgot-password"
+              className="text-blue-600 hover:underline font-medium"
+            >
+              Forgot your password?
+            </Link>
+          </p>
+          <p className="text-sm text-gray-600">
             Staff?{' '}
             <Link
               to="/staff/login"

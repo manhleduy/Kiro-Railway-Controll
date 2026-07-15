@@ -169,7 +169,9 @@ type Query {
 type Mutation {
   registerCustomer(input: RegisterCustomerInput!): AuthPayload!
   loginCustomer(customerId: String!, email: String!, password: String!): AuthPayload!
-  loginStaff(email: String!, password: String!): AuthPayload!
+  loginStaff(staffId: String!, email: String!, password: String!): AuthPayload!
+  requestPasswordReset(email: String!): Boolean!
+  resetPassword(email: String!, otp: String!, newPassword: String!): Boolean!
   updateCustomer(id: String!, input: UpdateCustomerInput!): AuthCustomerProfile!
   changePassword(id: String!, input: ChangePasswordInput!): Boolean!
   createTrip(input: CreateTripInput!): TripType!

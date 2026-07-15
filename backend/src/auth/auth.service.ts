@@ -2,20 +2,25 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RegisterCustomerInput } from './dto/register-customer.input';
-
 import { AuthPayload } from './dto/auth-payload.type';
 import { AuthCustomerProfile } from './dto/auth-payload-customer.type';
 import { AuthStaffProfile } from './dto/auth-payload-staff.type';
+import { MailService } from './mail.service';
+import { saveOtp, verifyOtp, deleteOtp } from './otp.store';
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly mail: MailService,
   ) {}
 
   async registerCustomer(input: RegisterCustomerInput): Promise<AuthPayload> {
@@ -100,9 +105,9 @@ export class AuthService {
     return { token, user: profile };
   }
 
-  async loginStaff(email: string, password: string): Promise<AuthPayload> {
+  async loginStaff(staffId: string, email: string, password: string): Promise<AuthPayload> {
     const staff = await this.prisma.staff.findUnique({
-      where: { email },
+      where: { email, staffId },
     });
 
     if (!staff) {
@@ -130,5 +135,45 @@ export class AuthService {
     return { token, user: profile };
   }
 
-  
+  /** Step 1 — generate OTP and email it to the customer */
+  async requestPasswordReset(email: string): Promise<boolean> {
+    const customer = await this.prisma.customer.findUnique({
+      where: { email },
+      select: { customerId: true },
+    });
+
+    // Do not reveal whether the email exists — always return true
+    if (!customer) return true;
+
+    const otp = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join('');
+    saveOtp(email, otp);
+    await this.mail.sendOtp(email, otp);
+    return true;
+  }
+
+  /** Step 2 — verify OTP and set a new password */
+  async resetPassword(email: string, otp: string, newPassword: string): Promise<boolean> {
+    const customer = await this.prisma.customer.findUnique({
+      where: { email },
+      select: { customerId: true },
+    });
+
+    if (!customer) {
+      throw new NotFoundException('No account found with this email');
+    }
+
+    const valid = verifyOtp(email, otp);
+    if (!valid) {
+      throw new BadRequestException('Invalid or expired verification code');
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await this.prisma.customer.update({
+      where: { email },
+      data: { password: hashed },
+    });
+
+    deleteOtp(email);
+    return true;
+  }
 }

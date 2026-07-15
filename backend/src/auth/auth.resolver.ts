@@ -12,23 +12,39 @@ export class AuthResolver {
     @Args('input') input: RegisterCustomerInput,
   ): Promise<AuthPayload> {
     return this.authService.registerCustomer(input);
-    
   }
 
   @Mutation(() => AuthPayload)
   loginCustomer(
-    @Args("customerId") customerId: string,
+    @Args('customerId') customerId: string,
     @Args('email') email: string,
     @Args('password') password: string,
   ): Promise<AuthPayload> {
-    return this.authService.loginCustomer(customerId,email, password);
+    return this.authService.loginCustomer(customerId, email, password);
   }
 
   @Mutation(() => AuthPayload)
   loginStaff(
+    @Args('staffId') staffId: string,
     @Args('email') email: string,
     @Args('password') password: string,
   ): Promise<AuthPayload> {
-    return this.authService.loginStaff(email, password);
+    return this.authService.loginStaff(staffId, email, password);
+  }
+
+  /** Sends a 6-digit OTP to the given email address */
+  @Mutation(() => Boolean)
+  requestPasswordReset(@Args('email') email: string): Promise<boolean> {
+    return this.authService.requestPasswordReset(email);
+  }
+
+  /** Verifies the OTP and sets the new password */
+  @Mutation(() => Boolean)
+  resetPassword(
+    @Args('email') email: string,
+    @Args('otp') otp: string,
+    @Args('newPassword') newPassword: string,
+  ): Promise<boolean> {
+    return this.authService.resetPassword(email, otp, newPassword);
   }
 }

@@ -58,15 +58,38 @@ export async function loginCustomer(
 }
 
 export async function loginStaff(
+  staffId: string,
   email: string,
   password: string,
 ): Promise<AuthPayload> {
   return gql<{ loginStaff: AuthPayload }>(
-    `mutation LoginStaff($email: String!, $password: String!) {
-       loginStaff(email: $email, password: $password) {
+    `mutation LoginStaff($staffId: String!, $email: String!, $password: String!) {
+       loginStaff(staffId: $staffId,email: $email, password: $password) {
          ${USER_FRAGMENT}
        }
      }`,
-    { email, password },
+    {staffId, email, password },
   ).then((d) => d.loginStaff);
+}
+
+export async function requestPasswordReset(email: string): Promise<boolean> {
+  return gql<{ requestPasswordReset: boolean }>(
+    `mutation RequestPasswordReset($email: String!) {
+       requestPasswordReset(email: $email)
+     }`,
+    { email },
+  ).then((d) => d.requestPasswordReset);
+}
+
+export async function resetPassword(
+  email: string,
+  otp: string,
+  newPassword: string,
+): Promise<boolean> {
+  return gql<{ resetPassword: boolean }>(
+    `mutation ResetPassword($email: String!, $otp: String!, $newPassword: String!) {
+       resetPassword(email: $email, otp: $otp, newPassword: $newPassword)
+     }`,
+    { email, otp, newPassword },
+  ).then((d) => d.resetPassword);
 }

@@ -9,6 +9,7 @@ import { useAuthDispatch } from '@/hooks';
 import type { StaffProfile } from '@/types';
 
 const schema = z.object({
+  staffId: z.string().min(1, 'id is required'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(1, 'Password is required'),
 });
@@ -27,7 +28,7 @@ export function LoginStaffPage() {
 
   async function onSubmit(data: FormData) {
     try {
-      const payload = await loginStaff(data.email, data.password);
+      const payload = await loginStaff(data.staffId,data.email, data.password);
       login({
         token: payload.token,
         role: 'staff',
@@ -53,6 +54,22 @@ export function LoginStaffPage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Your id
+            </label>
+            <input
+              {...register('staffId')}
+              type="staffId"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              placeholder="staff@railway.com"
+            />
+            {errors.staffId && (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.staffId.message}
+              </p>
+            )}
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email

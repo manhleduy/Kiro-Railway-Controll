@@ -28,7 +28,6 @@ export class OrdersService {
 
   async createOrder(input: CreateOrderInput): Promise<OrderType> {
     const { customerId, methodId, tickets } = input;
-    console.log(input)
     const ticketsJson = tickets.map((t: TicketInput) => ({
       seatId: t.seatId,
       passName: t.passName,
