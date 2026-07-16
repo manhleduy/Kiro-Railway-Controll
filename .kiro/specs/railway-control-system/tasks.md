@@ -452,6 +452,23 @@ Full-stack implementation of the Railway Control System — a NestJS 11 GraphQL 
     - Fetch seat classes; create/update forms with price > 0 Zod validation
     - _Requirements: 15.1, 15.2, 15.3, 15.4_
 
+- [ ] 23. Chatbot help page (frontend-only)
+  - [ ] 23.1 Create chatbot service layer
+    - Create `frontend/src/services/chatbot.service.ts` with a `sendMessage(message, history)` function
+    - The function currently runs a **local rule-based engine** (no backend call) so the feature works immediately; the function signature is designed so swapping it for a real API call later requires changing only this one file
+    - Knowledge base covers: how to register/login, browsing trips, making/managing orders, cancelling/changing tickets, giving feedback, profile/password, what Vaprise is
+  - [ ] 23.2 Implement ChatbotPage component
+    - Route: `/customer/chat` and `/staff/chat` (accessible from both layouts)
+    - Full-page chat UI: scrollable message history, user bubbles (right, blue), bot bubbles (left, white/gray), typing indicator (animated dots while "thinking")
+    - Suggested quick-reply chips rendered below the last bot message (e.g. "How do I book a ticket?", "Cancel a ticket", "Change my password")
+    - Input bar pinned to bottom: textarea (Enter = send, Shift+Enter = newline), Send button
+    - First message from bot is an automatic greeting when the page loads
+    - On every user message: show typing indicator for ~600 ms before showing the bot reply (gives natural feel)
+    - Timestamps on each message
+    - Auto-scroll to the latest message
+    - Add a "Chat" nav link (bot icon) to both `CustomerLayout` and `StaffLayout`
+  - _Requirements: Product spec — ease of use, understandable interface_
+
 - [~] 22. Final checkpoint — verify full build (backend + frontend)
   - Run `npm run build` in `backend/` and confirm no TypeScript errors
   - Run `npm run build` in `frontend/` and confirm no TypeScript errors

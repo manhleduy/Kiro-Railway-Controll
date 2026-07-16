@@ -9,3 +9,4 @@ export * from './seatClasses.service';
 export * from './feedback.service';
 export * from './methods.service';
 export * from './customers.service';
+export * from './chatbot.service';

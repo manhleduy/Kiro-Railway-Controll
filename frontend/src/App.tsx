@@ -15,6 +15,7 @@ import { ShiftsPage } from '@/features/shifts';
 import { SeatClassesPage } from '@/features/seatClasses';
 import { FeedbackPage } from '@/features/feedback';
 import { CustomerProfilePage } from '@/features/profile';
+import { ChatbotPage } from '@/features/chatbot';
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
             />
             <Route path="/customer/feedback" element={<FeedbackPage />} />
             <Route path="/customer/profile" element={<CustomerProfilePage />} />
+            <Route path="/customer/chat" element={<ChatbotPage />} />
           </Route>
         </Route>
 
@@ -55,6 +57,7 @@ export default function App() {
             <Route path="/staff/stations" element={<StationsPage />} />
             <Route path="/staff/shifts" element={<ShiftsPage />} />
             <Route path="/staff/seat-classes" element={<SeatClassesPage />} />
+            <Route path="/staff/chat" element={<ChatbotPage />} />
           </Route>
         </Route>
       </Routes>

@@ -8,6 +8,7 @@ import {
   Layers,
   LogOut,
   Shield,
+  Bot,
 } from 'lucide-react';
 import { useAuthDispatch } from '@/hooks';
 
@@ -73,6 +74,13 @@ export function StaffLayout() {
               >
                 <Layers className="h-4 w-4" />
                 Seat Classes
+              </Link>
+              <Link
+                to="/staff/chat"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
+              >
+                <Bot className="h-4 w-4" />
+                Help
               </Link>
               <button
                 onClick={handleLogout}

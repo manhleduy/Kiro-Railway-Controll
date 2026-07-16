@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { Train, ShoppingBag, MessageSquare, User, LogOut } from 'lucide-react';
+import { Train, ShoppingBag, MessageSquare, User, LogOut, Bot } from 'lucide-react';
 import { useAuthDispatch } from '@/hooks';
 
 export function CustomerLayout() {
@@ -43,6 +43,13 @@ export function CustomerLayout() {
               >
                 <MessageSquare className="h-4 w-4" />
                 Feedback
+              </Link>
+              <Link
+                to="/customer/chat"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+              >
+                <Bot className="h-4 w-4" />
+                Help
               </Link>
               <Link
                 to="/customer/profile"
