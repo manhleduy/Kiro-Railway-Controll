@@ -170,6 +170,7 @@ type Mutation {
   registerCustomer(input: RegisterCustomerInput!): AuthPayload!
   loginCustomer(customerId: String!, email: String!, password: String!): AuthPayload!
   loginStaff(staffId: String!, email: String!, password: String!): AuthPayload!
+  registerStaff(input: RegisterStaffInput!): AuthPayload!
   requestPasswordReset(email: String!): Boolean!
   resetPassword(email: String!, otp: String!, newPassword: String!): Boolean!
   updateCustomer(id: String!, input: UpdateCustomerInput!): AuthCustomerProfile!
@@ -193,6 +194,14 @@ type Mutation {
 
 input RegisterCustomerInput {
   customerId: String!
+  fullname: String!
+  email: String!
+  phone: String!
+  password: String!
+}
+
+input RegisterStaffInput {
+  staffId: String!
   fullname: String!
   email: String!
   phone: String!
@@ -256,6 +265,6 @@ input UpdateStationInput {
 
 input CreateShiftInput {
   staffId: String!
-  startTime: DateTime!
-  endTime: DateTime!
+  startTime: String!
+  endTime: String!
 }

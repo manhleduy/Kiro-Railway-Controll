@@ -14,6 +14,8 @@ import { AuthCustomerProfile } from './dto/auth-payload-customer.type';
 import { AuthStaffProfile } from './dto/auth-payload-staff.type';
 import { MailService } from './mail.service';
 import { saveOtp, verifyOtp, deleteOtp } from './otp.store';
+import { RegisterStaffInput } from './dto/register-staff.input';
+import { StaffProfile } from '../staff/dto/staff-profile.type';
 
 @Injectable()
 export class AuthService {
@@ -104,6 +106,55 @@ export class AuthService {
 
     return { token, user: profile };
   }
+  
+  async registerStaff(input: RegisterStaffInput): Promise<AuthPayload>{
+     const {staffId, fullname, email, phone, password } = input;
+    
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    let staff: AuthStaffProfile;
+    try {
+      
+      const created = await this.prisma.staff.create({
+        data: {
+          staffId,
+          fullname,
+          email,
+          phone,
+          password: hashedPassword,
+          role: "staff"
+        },
+      });
+      
+
+      staff = {
+        staffId: created.staffId,
+        fullname: created.fullname,
+        email: created.email,
+        phone: created.phone,
+        role: "staff"
+      };
+    } catch (err: unknown) {
+      
+      if (
+        err instanceof Error &&
+        'code' in err &&
+        (err as { code: string }).code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'A customer with this email already exists',
+        );
+      }
+      throw err;
+    }
+
+    const token = this.jwt.sign({
+      sub: staff.staffId,
+      role: 'customer',
+    });
+
+    return { token, user: staff };
+  }
 
   async loginStaff(staffId: string, email: string, password: string): Promise<AuthPayload> {
     const staff = await this.prisma.staff.findUnique({
@@ -111,12 +162,12 @@ export class AuthService {
     });
 
     if (!staff) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('email or staff id is wrong');
     }
 
     const passwordValid = await bcrypt.compare(password, staff.password);
     if (!passwordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('password wrong');
     }
 
     const token = this.jwt.sign({

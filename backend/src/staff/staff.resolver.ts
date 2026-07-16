@@ -4,6 +4,7 @@ import { StaffService } from './staff.service';
 import { StaffProfile } from './dto/staff-profile.type';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
+import { RegisterCustomerInput } from '../auth/dto/register-customer.input';
 
 @Resolver(() => StaffProfile)
 export class StaffResolver {
@@ -14,4 +15,5 @@ export class StaffResolver {
   getStaff(@Args('id') id: string): Promise<StaffProfile> {
     return this.staffService.findById(id);
   }
+ 
 }

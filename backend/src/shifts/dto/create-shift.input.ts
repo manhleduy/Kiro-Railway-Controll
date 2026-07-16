@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class CreateShiftInput {
@@ -8,8 +8,10 @@ export class CreateShiftInput {
   staffId: string;
 
   @Field()
-  startTime: Date;
+  @IsString()
+  startTime: string;
 
   @Field()
-  endTime: Date;
+  @IsString()
+  endTime: string;
 }

@@ -2,6 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { AuthPayload } from './dto/auth-payload.type';
 import { RegisterCustomerInput } from './dto/register-customer.input';
+import { RegisterStaffInput } from './dto/register-staff.input';
 
 @Resolver()
 export class AuthResolver {
@@ -30,6 +31,12 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<AuthPayload> {
     return this.authService.loginStaff(staffId, email, password);
+  }
+  @Mutation(()=>AuthPayload)
+  registerStaff(
+    @Args('input') input: RegisterStaffInput
+  ): Promise<AuthPayload>{
+    return this.authService.registerStaff(input);
   }
 
   /** Sends a 6-digit OTP to the given email address */

@@ -19,6 +19,7 @@ export class ShiftsResolver {
   @Mutation(() => ShiftType)
   @UseGuards(JwtAuthGuard, RolesGuard)
   createShift(@Args('input') input: CreateShiftInput): Promise<ShiftType> {
+    
     return this.shiftsService.create(input);
   }
 

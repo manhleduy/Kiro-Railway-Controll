@@ -24,6 +24,7 @@ export async function createShift(
   startTime: string,
   endTime: string,
 ): Promise<Shift> {
+  
   return gql<{ createShift: Shift }>(
     `mutation CreateShift($staffId: String!, $startTime: String!, $endTime: String!) {
        createShift(input: { staffId: $staffId, startTime: $startTime, endTime: $endTime }) {

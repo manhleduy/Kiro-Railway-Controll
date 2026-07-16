@@ -15,11 +15,12 @@ export class ShiftsService {
 
   async create(input: CreateShiftInput): Promise<ShiftType> {
     try {
+      const selectedDate = "2026-07-20";
       const shift = await this.prisma.shift.create({
         data: {
           staffId: input.staffId,
-          startTime: input.startTime,
-          endTime: input.endTime,
+          startTime: new Date(`${selectedDate}T${input.startTime}:00`).toISOString(),
+          endTime: new Date(`${selectedDate}T${input.endTime}:00`).toISOString(),
         },
       });
       return shift as ShiftType;
