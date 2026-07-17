@@ -18,6 +18,7 @@ import { StationsModule } from './stations/stations.module';
 import { ShiftsModule } from './shifts/shifts.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { MethodsModule } from './methods/methods.module';
+import { ChatBotModule } from './chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { MethodsModule } from './methods/methods.module';
     ShiftsModule,
     FeedbackModule,
     MethodsModule,
+    ChatBotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
