@@ -18,7 +18,6 @@ function layoutNodes(stations: Station[]): Record<string, NodePosition> {
   const count = stations.length;
   if (count === 0) return positions;
 
-  // Arrange in a grid-like pattern
   const cols = Math.ceil(Math.sqrt(count));
   const rows = Math.ceil(count / cols);
   const colGap = WIDTH / (cols + 1);
@@ -32,6 +31,7 @@ function layoutNodes(stations: Station[]): Record<string, NodePosition> {
       y: row * rowGap,
     };
   });
+
   return positions;
 }
 
@@ -40,14 +40,14 @@ export function StationGraph({ stations }: StationGraphProps) {
 
   if (stations.length === 0) {
     return (
-      <div className="flex items-center justify-center h-48 bg-gray-50 rounded-lg border border-dashed border-gray-300 text-gray-400 text-sm">
+      <div className="flex h-48 items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 text-sm text-slate-400">
         No stations to display
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+    <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white/80 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
       <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         width="100%"
@@ -63,21 +63,20 @@ export function StationGraph({ stations }: StationGraphProps) {
             refY="3.5"
             orient="auto"
           >
-            <polygon
-              points="0 0, 10 3.5, 0 7"
-              fill="#6b7280"
-            />
+            <polygon points="0 0, 10 3.5, 0 7" fill="#0f172a" />
           </marker>
+          <linearGradient id="stationNodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="100%" stopColor="#2563eb" />
+          </linearGradient>
         </defs>
 
-        {/* Draw edges */}
         {stations.map((station) =>
           station.nextStations.map((next: Station) => {
             const from = positions[station.stationId];
             const to = positions[next.stationId];
             if (!from || !to) return null;
 
-            // Shorten the line so it doesn't overlap the node circles
             const dx = to.x - from.x;
             const dy = to.y - from.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
@@ -95,25 +94,32 @@ export function StationGraph({ stations }: StationGraphProps) {
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                stroke="#6b7280"
+                stroke="#94a3b8"
                 strokeWidth="2"
+                strokeDasharray="4 4"
                 markerEnd="url(#arrowhead)"
               />
             );
           }),
         )}
 
-        {/* Draw nodes */}
         {stations.map((station) => {
           const pos = positions[station.stationId];
           if (!pos) return null;
+
           return (
             <g key={station.stationId}>
               <circle
                 cx={pos.x}
                 cy={pos.y}
+                r={NODE_RADIUS + 5}
+                fill="rgba(56,189,248,0.12)"
+              />
+              <circle
+                cx={pos.x}
+                cy={pos.y}
                 r={NODE_RADIUS}
-                fill="#3b82f6"
+                fill="url(#stationNodeGradient)"
                 stroke="#1d4ed8"
                 strokeWidth="2"
               />
@@ -123,7 +129,7 @@ export function StationGraph({ stations }: StationGraphProps) {
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="9"
-                fontWeight="600"
+                fontWeight="700"
                 fill="white"
               >
                 {station.stationId.length > 6
@@ -135,8 +141,8 @@ export function StationGraph({ stations }: StationGraphProps) {
                 y={pos.y + NODE_RADIUS + 12}
                 textAnchor="middle"
                 fontSize="11"
-                fill="#374151"
-                fontWeight="500"
+                fill="#0f172a"
+                fontWeight="600"
               >
                 {station.name}
               </text>
@@ -145,7 +151,7 @@ export function StationGraph({ stations }: StationGraphProps) {
                 y={pos.y + NODE_RADIUS + 24}
                 textAnchor="middle"
                 fontSize="9"
-                fill="#9ca3af"
+                fill="#64748b"
               >
                 {station.location}
               </text>

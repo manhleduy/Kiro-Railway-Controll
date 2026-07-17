@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { ArrowLeft, CreditCard } from 'lucide-react';
+import { ArrowLeft, CreditCard, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getTrip, getMethods, createOrder } from '@/services';
 import { useAuthState } from '@/hooks';
@@ -73,7 +73,7 @@ export function CreateOrderPage() {
         passName: data.passengers[i].passName,
         passCCCD: data.passengers[i].passCCCD,
       }));
-      
+
       const order = await createOrder(
         customerId,
         parseInt(data.methodId),
@@ -88,68 +88,97 @@ export function CreateOrderPage() {
     }
   }
 
+  const totalPrice = seats.reduce((sum, s) => sum + s.seatClass.price, 0);
+
   if (loading) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3" />
-        <div className="h-64 bg-gray-100 rounded-xl" />
+      <div className="space-y-4">
+        <div className="surface-card h-28 animate-pulse" />
+        <div className="surface-card h-64 animate-pulse" />
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <Link
         to={`/customer/trips/${tripId}`}
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-5"
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to trip
       </Link>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-        <CreditCard className="h-6 w-6 text-blue-600" />
-        Complete Your Booking
-      </h1>
+      <div className="surface-card flex flex-col gap-5 p-6 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <span className="hero-kicker">
+            <Sparkles className="h-3.5 w-3.5" />
+            Secure checkout
+          </span>
+          <h1 className="hero-title mt-4 flex items-center gap-3">
+            <CreditCard className="h-7 w-7 text-sky-600" />
+            Complete Your Booking
+          </h1>
+          <p className="hero-copy mt-2">
+            Confirm each passenger, choose a payment method, and finish the order in one clean step.
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+            Total price
+          </p>
+          <p className="mt-1 text-2xl font-semibold text-slate-900">
+            {totalPrice.toFixed(2)} VND
+          </p>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Passenger info per seat */}
         {fields.map((field, index) => {
           const seat = seats[index];
+
           return (
             <div
               key={field.id}
-              className="bg-white rounded-xl border border-gray-200 p-6"
+              className="surface-card p-6"
             >
-              <h3 className="font-semibold text-gray-800 mb-4">
-                Passenger {index + 1}
-                {seat && (
-                  <span className="ml-2 text-sm font-normal text-gray-500">
-                    — Seat #{seat.seatId} ({seat.seatClass.name}, $
-                    {seat.seatClass.price.toFixed(2)})
-                  </span>
-                )}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name
+                  <h3 className="card-heading text-lg">
+                    Passenger {index + 1}
+                  </h3>
+                  {seat && (
+                    <p className="card-subtitle mt-1">
+                      Seat #{seat.seatId} - {seat.seatClass.name} - ${seat.seatClass.price.toFixed(2)}
+                    </p>
+                  )}
+                </div>
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                  Passenger form
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Full name
                   </label>
                   <input
                     {...register(`passengers.${index}.passName`, {
                       required: 'Name is required',
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-modern"
                     placeholder="Nguyen Van A"
                   />
                   {errors.passengers?.[index]?.passName && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1.5 text-xs text-red-600">
                       {errors.passengers[index].passName?.message}
                     </p>
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
                     CCCD / ID Number
                   </label>
                   <input
@@ -157,11 +186,11 @@ export function CreateOrderPage() {
                       required: 'ID number is required',
                       minLength: { value: 9, message: 'Min 9 digits' },
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-modern"
                     placeholder="012345678912"
                   />
                   {errors.passengers?.[index]?.passCCCD && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1.5 text-xs text-red-600">
                       {errors.passengers[index].passCCCD?.message}
                     </p>
                   )}
@@ -171,41 +200,39 @@ export function CreateOrderPage() {
           );
         })}
 
-        {/* Payment method */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">Payment Method</h3>
+        <div className="surface-card p-6">
+          <h3 className="card-heading text-lg">Payment Method</h3>
+          <p className="card-subtitle mt-1 mb-4">
+            Choose how you want to pay for this booking.
+          </p>
           <select
             {...register('methodId', { required: 'Select a payment method' })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-modern"
           >
-            <option value="">Select payment method…</option>
+            <option value="">Select payment method...</option>
             {methods.map((m) => (
               <option key={m.methodId} value={m.methodId}>
-                {m.name} — {m.description}
+                {m.name} - {m.description}
               </option>
             ))}
           </select>
           {errors.methodId && (
-            <p className="mt-1 text-xs text-red-600">
+            <p className="mt-1.5 text-xs text-red-600">
               {errors.methodId.message}
             </p>
           )}
         </div>
 
-        <div className="flex items-center justify-between bg-blue-50 rounded-xl border border-blue-200 p-4">
-          <p className="font-medium text-blue-800">
-            Total:{' '}
-            {seats
-              .reduce((sum, s) => sum + s.seatClass.price, 0)
-              .toFixed(2)}{' '}
-            VND
+        <div className="surface-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-medium text-slate-800">
+            Total: {totalPrice.toFixed(2)} VND
           </p>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg transition-colors"
+            className="button-primary"
           >
-            {isSubmitting ? 'Processing…' : 'Confirm Order'}
+            {isSubmitting ? 'Processing...' : 'Confirm Order'}
           </button>
         </div>
       </form>

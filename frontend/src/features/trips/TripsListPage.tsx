@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Train, Search, Calendar, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -22,7 +22,7 @@ export function TripsListPage() {
       .finally(() => setLoading(false));
   }, [trackFilter]);
 
-  function handleSearch(e: React.FormEvent) {
+  function handleSearch(e: FormEvent) {
     e.preventDefault();
     setTrackFilter(inputValue.trim());
   }
@@ -42,29 +42,63 @@ export function TripsListPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Train className="h-6 w-6 text-blue-600" />
-          Available Trips
-        </h1>
+    <div className="space-y-6">
+      <div className="surface-card flex flex-col gap-5 p-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          <span className="hero-kicker">
+            <Train className="h-3.5 w-3.5" />
+            Live departures
+          </span>
+          <h1 className="hero-title mt-4 flex items-center gap-3">
+            <Train className="h-7 w-7 text-sky-600" />
+            Available Trips
+          </h1>
+          <p className="hero-copy mt-2">
+            Explore routes, compare available seat classes, and move quickly from browsing to booking.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 text-sm text-slate-600 sm:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+              Routes
+            </p>
+            <p className="mt-1 text-lg font-semibold text-slate-900">
+              {trips.length}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+              Search
+            </p>
+            <p className="mt-1 text-lg font-semibold text-slate-900">Track</p>
+          </div>
+          <div className="col-span-2 rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 sm:col-span-1">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+              Mode
+            </p>
+            <p className="mt-1 text-lg font-semibold text-slate-900">
+              Real time
+            </p>
+          </div>
+        </div>
       </div>
 
-      <form onSubmit={handleSearch} className="flex gap-2 mb-6">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <form
+        onSubmit={handleSearch}
+        className="surface-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center"
+      >
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Filter by track…"
-            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            placeholder="Filter by track..."
+            className="input-modern pl-11"
           />
         </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
+        <button type="submit" className="button-primary sm:min-w-32">
           Search
         </button>
         {trackFilter && (
@@ -74,7 +108,7 @@ export function TripsListPage() {
               setInputValue('');
               setTrackFilter('');
             }}
-            className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition-colors"
+            className="button-secondary sm:min-w-24"
           >
             Clear
           </button>
@@ -82,61 +116,55 @@ export function TripsListPage() {
       </form>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-xl border border-gray-200 p-5 animate-pulse"
-            >
-              <div className="h-5 bg-gray-200 rounded w-3/4 mb-3" />
-              <div className="h-4 bg-gray-100 rounded w-1/2" />
+            <div key={i} className="surface-card animate-pulse p-5">
+              <div className="mb-3 h-5 w-3/4 rounded bg-slate-200" />
+              <div className="h-4 w-1/2 rounded bg-slate-100" />
             </div>
           ))}
         </div>
       ) : trips.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <Train className="h-12 w-12 mx-auto mb-3 opacity-30" />
+        <div className="surface-card py-16 text-center text-slate-500">
+          <Train className="mx-auto mb-3 h-12 w-12 opacity-30" />
           <p>No trips found{trackFilter ? ` for "${trackFilter}"` : ''}.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {trips.map((trip) => (
             <Link
               key={trip.tripId}
               to={`/customer/trips/${trip.tripId}`}
-              className="bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-400 hover:shadow-md transition-all group"
+              className="surface-card group p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_44px_rgba(15,23,42,0.12)]"
             >
               <div className="flex items-start justify-between">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 truncate">
+                <div className="min-w-0 flex-1">
+                  <h3 className="truncate font-semibold text-slate-900">
                     {trip.track}
                   </h3>
-                  <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
+                  <div className="mt-1 flex items-center gap-1 text-sm text-slate-500">
                     <Calendar className="h-3.5 w-3.5" />
                     {new Date(trip.arrivalDate).toLocaleDateString()}
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors shrink-0 mt-0.5" />
+                <ChevronRight className="mt-0.5 h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500" />
               </div>
 
               <div className="mt-4 space-y-1">
                 {getSeatClassSummary(trip).map(([cls, count]) => (
-                  <div
-                    key={cls}
-                    className="flex items-center justify-between text-sm"
-                  >
-                    <span className="text-gray-600">{cls}</span>
-                    <span className="font-medium text-green-600">
+                  <div key={cls} className="flex items-center justify-between text-sm">
+                    <span className="text-slate-600">{cls}</span>
+                    <span className="font-medium text-emerald-600">
                       {count} available
                     </span>
                   </div>
                 ))}
                 {getSeatClassSummary(trip).length === 0 && (
-                  <p className="text-sm text-red-500">Fully booked</p>
+                  <p className="text-sm text-rose-500">Fully booked</p>
                 )}
               </div>
 
-              <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
+              <div className="mt-3 border-t border-slate-100 pt-3 text-xs text-slate-400">
                 {getAvailableCount(trip)} / {trip.seats.length} seats available
               </div>
             </Link>

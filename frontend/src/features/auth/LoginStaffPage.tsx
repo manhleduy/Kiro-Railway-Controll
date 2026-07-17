@@ -3,9 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Shield } from 'lucide-react';
+import { ShieldCheck, Shield, Train, ClipboardList } from 'lucide-react';
 import { loginStaff } from '@/services';
 import { useAuthDispatch } from '@/hooks';
+import { AuthLayout } from '@/components';
 import type { StaffProfile } from '@/types';
 
 const schema = z.object({
@@ -28,7 +29,11 @@ export function LoginStaffPage() {
 
   async function onSubmit(data: FormData) {
     try {
-      const payload = await loginStaff(data.staffId,data.email, data.password);
+      const payload = await loginStaff(
+        data.staffId,
+        data.email,
+        data.password,
+      );
       login({
         token: payload.token,
         role: 'staff',
@@ -43,61 +48,80 @@ export function LoginStaffPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center mb-3">
-            <Shield className="h-6 w-6 text-yellow-400" />
+    <AuthLayout
+      badge="Operations access"
+      title="Control booking workflows with confidence"
+      description="Sign in to manage orders, tickets, schedules, stations, and support from a focused operations workspace."
+      icon={<Shield className="h-6 w-6" />}
+      accentLabel="Staff portal"
+      accentTone="staff"
+      points={[
+        'Operational tools for orders, tickets, and route data',
+        'Fast access to seat classes, shifts, and station management',
+        'Designed for quick scanability in busy environments',
+      ]}
+      footer={
+        <p className="text-center text-sm text-slate-600">
+          <Link to="/login" className="font-semibold text-amber-700 hover:text-amber-800">
+            Back to customer login
+          </Link>
+        </p>
+      }
+    >
+      <div className="mx-auto max-w-md">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-amber-300 ring-1 ring-slate-800">
+            <ShieldCheck className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Staff Login</h1>
-          <p className="text-gray-500 text-sm mt-1">Operations portal access</p>
+          <h2 className="card-heading text-2xl">Staff Login</h2>
+          <p className="card-subtitle mt-2">Operations portal access</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Your id
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Staff ID
             </label>
             <input
               {...register('staffId')}
-              type="staffId"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              type="text"
+              className="input-modern"
               placeholder="staff@railway.com"
             />
             {errors.staffId && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.staffId.message}
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Email
             </label>
             <input
               {...register('email')}
               type="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              className="input-modern"
               placeholder="staff@railway.com"
             />
             {errors.email && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.email.message}
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Password
             </label>
             <input
               {...register('password')}
               type="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-              placeholder="••••••••"
+              className="input-modern"
+              placeholder="********"
             />
             {errors.password && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.password.message}
               </p>
             )}
@@ -106,18 +130,23 @@ export function LoginStaffPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
+            className="button-primary w-full bg-slate-950 hover:bg-slate-800"
           >
-            {isSubmitting ? 'Signing in…' : 'Sign in'}
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <Link to="/login" className="text-sm text-gray-600 hover:underline">
-            ← Customer login
-          </Link>
+        <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-500">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+            <ClipboardList className="mb-2 h-4 w-4 text-amber-600" />
+            Live queues
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+            <Train className="mb-2 h-4 w-4 text-amber-600" />
+            Route control
+          </div>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

@@ -15,7 +15,7 @@ export function OrdersListPage() {
 
   useEffect(() => {
     const customerId = (auth.user as CustomerProfile | null)?.customerId;
-  
+
     if (!customerId) return;
     myOrders(customerId)
       .then((data: Order[]) => {
@@ -34,31 +34,47 @@ export function OrdersListPage() {
     return (
       <div className="space-y-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={i}
-            className="bg-white rounded-xl border border-gray-200 p-5 animate-pulse h-20"
-          />
+          <div key={i} className="surface-card h-20 animate-pulse p-5" />
         ))}
       </div>
     );
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-6">
-        <ShoppingBag className="h-6 w-6 text-blue-600" />
-        My Orders
-      </h1>
+    <div className="space-y-6">
+      <div className="surface-card flex flex-col gap-5 p-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          <span className="hero-kicker">
+            <ShoppingBag className="h-3.5 w-3.5" />
+            Booking history
+          </span>
+          <h1 className="hero-title mt-4 flex items-center gap-3">
+            <ShoppingBag className="h-7 w-7 text-sky-600" />
+            My Orders
+          </h1>
+          <p className="hero-copy mt-2">
+            Review payment status, ticket counts, and booking details from a single clean dashboard.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+            Total orders
+          </p>
+          <p className="mt-1 text-lg font-semibold text-slate-900">
+            {orders.length}
+          </p>
+        </div>
+      </div>
 
       {orders.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <ShoppingBag className="h-12 w-12 mx-auto mb-3 opacity-30" />
+        <div className="surface-card py-16 text-center text-slate-500">
+          <ShoppingBag className="mx-auto mb-3 h-12 w-12 opacity-30" />
           <p>No orders yet.</p>
           <Link
             to="/customer/trips"
-            className="text-blue-600 hover:underline mt-2 block text-sm"
+            className="mt-3 inline-flex items-center font-semibold text-sky-700 hover:text-sky-800"
           >
-            Browse trips →
+            Browse trips
           </Link>
         </div>
       ) : (
@@ -67,29 +83,29 @@ export function OrdersListPage() {
             <Link
               key={order.orderId}
               to={`/customer/orders/${order.orderId}`}
-              className="flex items-center justify-between bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all group"
+              className="surface-card group flex items-center justify-between p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_rgba(15,23,42,0.12)]"
             >
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3 flex-wrap">
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-slate-800">
                     Order #{order.orderId}
                   </span>
                   <Badge status={order.status} />
                 </div>
-                <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
-                  <span className="flex items-center gap-1">
+                <div className="mt-1 flex items-center gap-4 text-sm text-slate-500">
+                  <span className="flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5" />
                     {new Date(order.createdAt).toLocaleDateString()}
                   </span>
                   <span>{order.tickets.length} ticket(s)</span>
                   {order.payment && (
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-slate-700">
                       ${order.payment.price.toFixed(2)}
                     </span>
                   )}
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-blue-500 shrink-0" />
+              <ChevronRight className="h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500" />
             </Link>
           ))}
         </div>

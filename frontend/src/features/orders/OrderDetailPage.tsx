@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, CreditCard, User } from 'lucide-react';
+import { ArrowLeft, CreditCard, User, Sparkles } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { myOrders, cancelTicket, changeTicket } from '@/services';
@@ -47,38 +47,38 @@ function ChangeTicketRow({
   }
 
   return (
-    <div className="mt-2">
+    <div className="mt-3 space-y-3">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="text-sm text-blue-600 hover:underline"
+        className="text-sm font-semibold text-sky-700 hover:text-sky-800"
       >
         {open ? 'Cancel change' : 'Change ticket'}
       </button>
       {open && (
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-2 grid grid-cols-3 gap-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2 sm:grid-cols-3">
           <input
             {...register('newSeatId', { required: true })}
             type="number"
             placeholder="New seat ID"
-            className="px-2 py-1 border border-gray-300 rounded text-sm"
+            className="input-modern"
           />
           <input
             {...register('passCCCD', { required: true })}
             placeholder="New CCCD"
-            className="px-2 py-1 border border-gray-300 rounded text-sm"
+            className="input-modern"
           />
           <input
             {...register('passName', { required: true })}
             placeholder="New name"
-            className="px-2 py-1 border border-gray-300 rounded text-sm"
+            className="input-modern"
           />
           <button
             type="submit"
             disabled={isSubmitting}
-            className="col-span-3 px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 disabled:bg-blue-300"
+            className="button-primary sm:col-span-3"
           >
-            {isSubmitting ? 'Saving…' : 'Save changes'}
+            {isSubmitting ? 'Saving...' : 'Save changes'}
           </button>
         </form>
       )}
@@ -124,104 +124,112 @@ export function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3" />
-        <div className="h-48 bg-gray-100 rounded-xl" />
+      <div className="space-y-4">
+        <div className="surface-card h-28 animate-pulse" />
+        <div className="surface-card h-48 animate-pulse" />
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="text-center py-16 text-gray-500">
+      <div className="surface-card py-16 text-center text-slate-500">
         <p>Order not found.</p>
         <Link
           to="/customer/orders"
-          className="text-blue-600 hover:underline mt-2 block"
+          className="mt-3 inline-flex items-center font-semibold text-sky-700 hover:text-sky-800"
         >
-          ← Back to orders
+          Back to orders
         </Link>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <Link
         to="/customer/orders"
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-5"
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to orders
       </Link>
 
-      <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Order #{order.orderId}
-        </h1>
-        <Badge status={order.status} />
+      <div className="surface-card overflow-hidden p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <span className="hero-kicker">
+              <Sparkles className="h-3.5 w-3.5" />
+              Order summary
+            </span>
+            <h1 className="hero-title mt-4">Order #{order.orderId}</h1>
+            <p className="hero-copy mt-2">
+              Review payment details and manage passenger tickets from a single view.
+            </p>
+          </div>
+          <Badge status={order.status} />
+        </div>
       </div>
 
-      {/* Payment info */}
       {order.payment && (
-        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-5 flex items-center gap-3">
-          <CreditCard className="h-5 w-5 text-gray-400" />
+        <div className="surface-card flex items-start gap-4 p-5">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-700 ring-1 ring-sky-100">
+            <CreditCard className="h-5 w-5" />
+          </div>
           <div>
-            <p className="font-medium text-gray-800">
-              ${order.payment.price.toFixed(2)} via{' '}
-              {order.payment.method.name}
+            <p className="font-semibold text-slate-900">
+              ${order.payment.price.toFixed(2)} via {order.payment.method.name}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="mt-1 text-sm text-slate-500">
               {order.payment.method.description}
             </p>
           </div>
         </div>
       )}
 
-      {/* Tickets */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h2 className="font-semibold text-gray-800 mb-4">
-          Tickets ({order.tickets.length})
-        </h2>
+      <div className="surface-card p-5">
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <h2 className="card-heading">Tickets ({order.tickets.length})</h2>
+          <p className="card-subtitle">Passenger management and seat control</p>
+        </div>
+
         <div className="space-y-4">
           {order.tickets.map((ticket: Ticket) => (
             <div
               key={ticket.ticketId}
-              className="flex items-start justify-between border-b border-gray-100 last:border-0 pb-4 last:pb-0"
+              className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4"
             >
-              <div className="flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <User className="h-4 w-4 text-gray-400" />
-                  <span className="font-medium text-gray-800">
-                    {ticket.passName}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {ticket.passCCCD}
-                  </span>
-                  <Badge status={ticket.status} />
-                </div>
-                {ticket.seat && (
-                  <p className="text-sm text-gray-500 mt-1 ml-6">
-                    Seat #{ticket.seat.seatId} — {ticket.seat.seatClass.name}
-                  </p>
-                )}
-                {ticket.status === 'Open' && (
-                  <div className="ml-6">
-                    <ChangeTicketRow
-                      ticket={ticket}
-                      onChanged={loadOrder}
-                    />
+              <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <User className="h-4 w-4 text-slate-400" />
+                    <span className="font-medium text-slate-900">
+                      {ticket.passName}
+                    </span>
+                    <span className="text-sm text-slate-500">
+                      {ticket.passCCCD}
+                    </span>
+                    <Badge status={ticket.status} />
                   </div>
+                  {ticket.seat && (
+                    <p className="mt-2 text-sm text-slate-500">
+                      Seat #{ticket.seat.seatId} - {ticket.seat.seatClass.name}
+                    </p>
+                  )}
+                  {ticket.status === 'Open' && (
+                    <ChangeTicketRow ticket={ticket} onChanged={loadOrder} />
+                  )}
+                </div>
+
+                {ticket.status === 'Open' && ticket.seatId !== null && (
+                  <button
+                    onClick={() => handleCancel(ticket.seatId)}
+                    className="button-secondary border-rose-200 bg-rose-50 text-rose-700 hover:border-rose-300 hover:bg-rose-100"
+                  >
+                    Cancel
+                  </button>
                 )}
               </div>
-              {ticket.status === 'Open' && ticket.seatId !== null && (
-                <button
-                  onClick={() => handleCancel(ticket.seatId)}
-                  className="ml-4 px-3 py-1 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors shrink-0"
-                >
-                  Cancel
-                </button>
-              )}
             </div>
           ))}
         </div>

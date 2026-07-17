@@ -3,8 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Train } from 'lucide-react';
+import { UserPlus, Train, ShieldCheck, Clock3 } from 'lucide-react';
 import { registerCustomer } from '@/services';
+import { AuthLayout } from '@/components';
 
 const schema = z.object({
   customerId: z.string().min(1, 'id is required'),
@@ -17,7 +18,6 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export function RegisterPage() {
-  
   const navigate = useNavigate();
 
   const {
@@ -45,119 +45,137 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-3">
-            <Train className="h-6 w-6 text-white" />
+    <AuthLayout
+      badge="New passenger"
+      title="Create a streamlined account for every trip"
+      description="Register once, then use the same account to book seats, manage orders, and get support from your profile."
+      icon={<Train className="h-6 w-6" />}
+      accentLabel="Faster onboarding"
+      accentTone="customer"
+      points={[
+        'One account for booking, refunds, and ticket history',
+        'Clear seat selection and order status tracking',
+        'Quick password recovery and direct support access',
+      ]}
+      footer={
+        <p className="text-center text-sm text-slate-600">
+          Already have an account?{' '}
+          <Link
+            to="/login"
+            className="font-semibold text-sky-700 hover:text-sky-800"
+          >
+            Sign in
+          </Link>
+        </p>
+      }
+    >
+      <div className="mx-auto max-w-md">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 text-sky-700 ring-1 ring-sky-100">
+            <UserPlus className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-gray-500 text-sm mt-1">Join Railway today</p>
+          <h2 className="card-heading text-2xl">Create Account</h2>
+          <p className="card-subtitle mt-2">Join Railway today</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              your id
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Customer ID
             </label>
             <input
               {...register('customerId')}
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Nguyen Van A"
+              className="input-modern"
+              placeholder="your-id"
             />
             {errors.customerId && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.customerId.message}
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Full name
             </label>
             <input
               {...register('fullname')}
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-modern"
               placeholder="Nguyen Van A"
             />
             {errors.fullname && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.fullname.message}
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Email
             </label>
             <input
               {...register('email')}
               type="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-modern"
               placeholder="you@example.com"
             />
             {errors.email && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.email.message}
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Phone
             </label>
             <input
               {...register('phone')}
               type="tel"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-modern"
               placeholder="0901234567"
             />
             {errors.phone && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.phone.message}
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-2 block text-sm font-medium text-slate-700">
               Password
             </label>
             <input
               {...register('password')}
               type="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input-modern"
               placeholder="Min. 8 characters"
             />
             {errors.password && (
-              <p className="mt-1 text-xs text-red-600">
+              <p className="mt-1.5 text-xs text-red-600">
                 {errors.password.message}
               </p>
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg transition-colors"
-          >
-            {isSubmitting ? 'Creating account…' : 'Create account'}
+          <button type="submit" disabled={isSubmitting} className="button-primary w-full">
+            {isSubmitting ? 'Creating account...' : 'Create account'}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link
-              to="/login"
-              className="text-blue-600 hover:underline font-medium"
-            >
-              Sign in
-            </Link>
-          </p>
+        <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-500">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+            <ShieldCheck className="mb-2 h-4 w-4 text-sky-600" />
+            Secure profile
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+            <Clock3 className="mb-2 h-4 w-4 text-sky-600" />
+            Faster check-in
+          </div>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

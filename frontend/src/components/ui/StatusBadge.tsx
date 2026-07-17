@@ -3,12 +3,12 @@ import type { OrderStatus, TicketStatus } from '@/types';
 type BadgeStatus = OrderStatus | TicketStatus;
 
 const statusStyles: Record<BadgeStatus, string> = {
-  Pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  Confirmed: 'bg-green-100 text-green-800 border-green-200',
-  Denied: 'bg-red-100 text-red-800 border-red-200',
-  Open: 'bg-blue-100 text-blue-800 border-blue-200',
-  Canceled: 'bg-gray-100 text-gray-600 border-gray-200',
-  Resolved: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  Pending: 'bg-amber-50 text-amber-700 border-amber-200',
+  Confirmed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  Denied: 'bg-rose-50 text-rose-700 border-rose-200',
+  Open: 'bg-sky-50 text-sky-700 border-sky-200',
+  Canceled: 'bg-slate-100 text-slate-600 border-slate-200',
+  Resolved: 'bg-teal-50 text-teal-700 border-teal-200',
 };
 
 interface StatusBadgeProps {
@@ -19,8 +19,9 @@ interface StatusBadgeProps {
 export function Badge({ status, className = '' }: StatusBadgeProps) {
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusStyles[status]} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${statusStyles[status]} ${className}`}
     >
+      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-75" />
       {status}
     </span>
   );

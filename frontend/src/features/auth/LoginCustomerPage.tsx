@@ -3,9 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Train } from 'lucide-react';
+import { Clock3, ShieldCheck, Ticket, Train } from 'lucide-react';
 import { loginCustomer } from '@/services';
 import { useAuthDispatch } from '@/hooks';
+import { AuthLayout } from '@/components';
 import type { CustomerProfile } from '@/types';
 
 const schema = z.object({
@@ -28,7 +29,11 @@ export function LoginCustomerPage() {
 
   async function onSubmit(data: FormData) {
     try {
-      const payload = await loginCustomer(data.customerId, data.email, data.password);
+      const payload = await loginCustomer(
+        data.customerId,
+        data.email,
+        data.password,
+      );
       login({
         token: payload.token,
         role: 'customer',
@@ -43,104 +48,128 @@ export function LoginCustomerPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-3">
-            <Train className="h-6 w-6 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">Customer Login</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              {...register('customerId')}
-              type="customerId"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="your id"
-            />
-            {errors.customerId && (
-              <p className="mt-1 text-xs text-red-600">
-                {errors.customerId.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              {...register('email')}
-              type="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="you@example.com"
-            />
-            {errors.email && (
-              <p className="mt-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              {...register('password')}
-              type="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="••••••••"
-            />
-            {errors.password && (
-              <p className="mt-1 text-xs text-red-600">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg transition-colors"
-          >
-            {isSubmitting ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center space-y-2">
-          <p className="text-sm text-gray-600">
+    <AuthLayout
+      badge="Customer access"
+      title="Travel smarter with a cleaner booking flow"
+      description="Sign in to browse trips, choose seats, manage orders, and keep track of your journey in one place."
+      icon={<Train className="h-6 w-6" />}
+      accentLabel="Passenger experience"
+      accentTone="customer"
+      points={[
+        'Live trip browsing with seat availability at a glance',
+        'Fast booking and order tracking from any device',
+        'Self-service help, feedback, and profile management',
+      ]}
+      footer={
+        <div className="space-y-2 text-center text-sm text-slate-600">
+          <p>
             Don&apos;t have an account?{' '}
             <Link
               to="/register"
-              className="text-blue-600 hover:underline font-medium"
+              className="font-semibold text-sky-700 hover:text-sky-800"
             >
               Register
             </Link>
           </p>
-          <p className="text-sm text-gray-600">
+          <p>
             <Link
               to="/forgot-password"
-              className="text-blue-600 hover:underline font-medium"
+              className="font-semibold text-sky-700 hover:text-sky-800"
             >
               Forgot your password?
             </Link>
           </p>
-          <p className="text-sm text-gray-600">
+          <p>
             Staff?{' '}
             <Link
               to="/staff/login"
-              className="text-gray-700 hover:underline font-medium"
+              className="font-semibold text-slate-700 hover:text-slate-900"
             >
               Staff login
             </Link>
           </p>
         </div>
+      }
+    >
+      <div className="mx-auto max-w-md">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 text-sky-700 ring-1 ring-sky-100">
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+          <h2 className="card-heading text-2xl">Customer Login</h2>
+          <p className="card-subtitle mt-2">Sign in to your account</p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Customer ID
+            </label>
+            <input
+              {...register('customerId')}
+              type="text"
+              className="input-modern"
+              placeholder="your-id"
+            />
+            {errors.customerId && (
+              <p className="mt-1.5 text-xs text-red-600">
+                {errors.customerId.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Email
+            </label>
+            <input
+              {...register('email')}
+              type="email"
+              className="input-modern"
+              placeholder="you@example.com"
+            />
+            {errors.email && (
+              <p className="mt-1.5 text-xs text-red-600">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Password
+            </label>
+            <input
+              {...register('password')}
+              type="password"
+              className="input-modern"
+              placeholder="********"
+            />
+            {errors.password && (
+              <p className="mt-1.5 text-xs text-red-600">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          <button type="submit" disabled={isSubmitting} className="button-primary w-full">
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
+          </button>
+        </form>
+
+        <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-slate-500 sm:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+            <Ticket className="mb-2 h-4 w-4 text-sky-600" />
+            Seat selection
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+            <Clock3 className="mb-2 h-4 w-4 text-sky-600" />
+            Order tracking
+          </div>
+          <div className="col-span-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 sm:col-span-1">
+            <ShieldCheck className="mb-2 h-4 w-4 text-sky-600" />
+            Secure access
+          </div>
+        </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

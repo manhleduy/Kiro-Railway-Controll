@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Train } from 'lucide-react';
+import { ArrowLeft, Calendar, Train, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getTrip } from '@/services';
 import { SeatGrid } from '@/components';
@@ -26,7 +26,9 @@ export function TripDetailPage() {
 
   function handleSelect(seatId: number) {
     setSelectedIds((prev) =>
-      prev.includes(seatId) ? prev.filter((id) => id !== seatId) : [...prev, seatId],
+      prev.includes(seatId)
+        ? prev.filter((id) => id !== seatId)
+        : [...prev, seatId],
     );
   }
 
@@ -35,66 +37,81 @@ export function TripDetailPage() {
       toast.error('Please select at least one seat');
       return;
     }
-    navigate(
-      `/customer/trips/${tripId}/order?seats=${selectedIds.join(',')}`,
-    );
+    navigate(`/customer/trips/${tripId}/order?seats=${selectedIds.join(',')}`);
   }
 
   if (loading) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3" />
-        <div className="h-64 bg-gray-100 rounded-xl" />
+      <div className="space-y-4">
+        <div className="surface-card h-28 animate-pulse" />
+        <div className="surface-card h-64 animate-pulse" />
       </div>
     );
   }
 
   if (!trip) {
     return (
-      <div className="text-center py-16 text-gray-500">
+      <div className="surface-card py-16 text-center text-slate-500">
         <p>Trip not found.</p>
-        <Link to="/customer/trips" className="text-blue-600 hover:underline mt-2 block">
-          ← Back to trips
+        <Link
+          to="/customer/trips"
+          className="mt-3 inline-flex items-center font-semibold text-sky-700 hover:text-sky-800"
+        >
+          Back to trips
         </Link>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <Link
         to="/customer/trips"
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-5"
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to trips
       </Link>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <div className="flex items-start justify-between flex-wrap gap-3">
+      <div className="surface-card overflow-hidden p-6">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Train className="h-6 w-6 text-blue-600" />
+            <span className="hero-kicker">
+              <Sparkles className="h-3.5 w-3.5" />
+              Trip details
+            </span>
+            <h1 className="hero-title mt-4 flex items-center gap-3">
+              <Train className="h-7 w-7 text-sky-600" />
               {trip.track}
             </h1>
-            <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
+            <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
               <Calendar className="h-4 w-4" />
               Arrival: {new Date(trip.arrivalDate).toLocaleString()}
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-500">
-              {trip.seats.filter((s) => s.status === 'Available').length} seats
-              available
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-right">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+              Seats available
+            </p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900">
+              {trip.seats.filter((s) => s.status === 'Available').length}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          Select Seats
-        </h2>
+      <div className="surface-card p-6">
+        <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="card-heading text-lg">Select Seats</h2>
+            <p className="card-subtitle mt-1">
+              Click available seats to build your booking.
+            </p>
+          </div>
+          <span className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+            {selectedIds.length} selected
+          </span>
+        </div>
         <SeatGrid
           seats={trip.seats}
           selectedIds={selectedIds}
@@ -103,15 +120,12 @@ export function TripDetailPage() {
       </div>
 
       {selectedIds.length > 0 && (
-        <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 flex items-center justify-between">
-          <p className="text-blue-800 font-medium">
+        <div className="surface-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-medium text-slate-800">
             {selectedIds.length} seat{selectedIds.length > 1 ? 's' : ''} selected
           </p>
-          <button
-            onClick={handleBook}
-            className="px-5 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-          >
-            Book Selected Seats →
+          <button onClick={handleBook} className="button-primary">
+            Book Selected Seats
           </button>
         </div>
       )}
