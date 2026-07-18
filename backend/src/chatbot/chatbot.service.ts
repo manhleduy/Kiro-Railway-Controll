@@ -1,27 +1,29 @@
 import {Ollama, OllamaEmbedding} from "@llamaindex/ollama";
 import { Injectable } from "@nestjs/common";
-import { Settings } from "llamaindex";
+import { EngineResponse, Settings } from "llamaindex";
 import {MarkdownReader} from "@llamaindex/readers/markdown";
 import {
     VectorStoreIndex,
-    Metadata,
     Document, 
     SentenceSplitter, 
     MarkdownNodeParser,
     PromptTemplate,
-    TreeSummarizePrompt} from "llamaindex";
+    TreeSummarizePrompt,
+    FaithfulnessEvaluator,
+    RelevancyEvaluator
+} from "llamaindex";
 import { Bm25Retriever } from "@llamaindex/bm25-retriever";
 import {Logger} from "@nestjs/common";
+
 @Injectable()
 export class ChatBotService{
+
     onModuleInit() {
     try {
       // Configure global LlamaIndex settings
       Settings.llm = new Ollama({
         model: 'llama3.2'
       });
-
-
 
       Settings.embedModel = new OllamaEmbedding({
         model: 'mxbai-embed-large'
@@ -34,16 +36,61 @@ export class ChatBotService{
   }
     private readonly FILE_PATH= './src/chatbot/DOCUMENT.md';
     async chatBot(query: string){
+
+        //create nodes
         const reader = new MarkdownReader();
         const documents = await reader.loadData(this.FILE_PATH);
+        const markdownParser = new MarkdownNodeParser()
+        const nodes = markdownParser.getNodesFromDocuments(documents);
 
         console.log("Create embeddings...")
-        const index = await VectorStoreIndex.fromDocuments(documents);
-
+        const index = await VectorStoreIndex.fromDocuments(nodes);
+        
         const queryEngine = index.asQueryEngine();
+        
         const response = await queryEngine.query({query: query});
+        //const response = await retriever.retrieve({query: query})
+
+        this.evaluation(query,response);
         return response.toString();
     }
+  
+    private async evaluation(query: string, response: EngineResponse) {
+      
+
+        // 3. Instantiate LlamaIndex Evaluators
+        const faithfulness = new FaithfulnessEvaluator();
+        const relevancy = new RelevancyEvaluator();
+
+
+        // 5. Run Faithfulness Evaluation (Did it hallucinate?)
+        const faithResult = await faithfulness.evaluateResponse({
+            query: query,
+            response:response,
+        });
+
+        // 6. Run Relevancy Evaluation (Did it actually answer the prompt?)
+        const relResult = await relevancy.evaluateResponse({
+            query: query,
+            response: response,
+        });
+
+        // 7. Output the Benchmark Scores
+        console.log("📊 --- RAG SYSTEM EVALUATION RESULTS ---");
+        console.log(`Faithfulness (No Hallucination): ${faithResult.passing ? "✅ PASS" : "❌ FAIL"}`);
+        console.log(`Feedback: ${faithResult.feedback}`);
+        
+        console.log(`\nRelevancy (Answered Question):  ${relResult.passing ? "✅ PASS" : "❌ FAIL"}`);
+        console.log(`Feedback: ${relResult.feedback}`);
+    }
+    private async prompt(){
+      `You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. 
+      If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise <|eot_id|><|start_header_id|>user<|end_header_id|> 
+          Question: {question} 
+          Context: {context} 
+        Answer: `
+    }
+
     
 }
 

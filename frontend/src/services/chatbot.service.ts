@@ -8,12 +8,15 @@ export interface ChatMessage {
 }
 
 export async function sendMessage(text: string): Promise<ChatMessage> {
+  const start = performance.now()
   const reply = await gql<{ chatBot: string }>(
     `mutation ChatBot($query: String!) {
        chatBot(query: $query)
      }`,
     { query: text },
   ).then((d) => d.chatBot);
+  const end = performance.now()
+  console.log(end-start);
 
   return {
     id: `bot-${Date.now()}`,
