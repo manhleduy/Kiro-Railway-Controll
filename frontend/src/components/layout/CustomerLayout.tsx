@@ -1,6 +1,7 @@
 import { NavLink, Link, Outlet, useNavigate } from 'react-router-dom';
 import {
   Train,
+  MapPin,
   ShoppingBag,
   MessageSquare,
   User,
@@ -12,6 +13,7 @@ import { useAuthDispatch } from '@/hooks';
 
 const navItems = [
   { to: '/customer/trips', label: 'Trips', icon: Train },
+  { to: '/customer/stations', label: 'Stations', icon: MapPin },
   { to: '/customer/orders', label: 'Orders', icon: ShoppingBag },
   { to: '/customer/feedback', label: 'Feedback', icon: MessageSquare },
   { to: '/customer/chat', label: 'Help', icon: Bot },

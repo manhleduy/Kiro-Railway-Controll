@@ -11,5 +11,6 @@ export class StationType {
   @Field()
   location: string;
 
-
+  @Field(() => [StationType])
+  nextStations: StationType[];
 }

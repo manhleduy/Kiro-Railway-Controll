@@ -133,6 +133,7 @@ type StationType {
   stationId: String!
   name: String!
   location: String!
+  nextStations: [StationType!]!
 }
 
 type ShiftType {
@@ -254,6 +255,7 @@ input CreateStationInput {
   stationId: String!
   name: String!
   location: String!
+  nextStationIds: [String!]
 }
 
 input UpdateStationInput {

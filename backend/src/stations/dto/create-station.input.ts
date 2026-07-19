@@ -15,4 +15,7 @@ export class CreateStationInput {
   @IsNotEmpty()
   location: string;
 
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  nextStationIds?: string[];
 }

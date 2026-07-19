@@ -10,7 +10,7 @@ import {
   StaffOrdersPage,
 } from '@/features/orders';
 import { TicketsPage } from '@/features/tickets';
-import { StationsPage } from '@/features/stations';
+import { StationsPage, CustomerStationsPage } from '@/features/stations';
 import { ShiftsPage } from '@/features/shifts';
 import { SeatClassesPage } from '@/features/seatClasses';
 import { FeedbackPage } from '@/features/feedback';
@@ -42,6 +42,7 @@ export default function App() {
               path="/customer/orders/:orderId"
               element={<OrderDetailPage />}
             />
+            <Route path="/customer/stations" element={<CustomerStationsPage />} />
             <Route path="/customer/feedback" element={<FeedbackPage />} />
             <Route path="/customer/profile" element={<CustomerProfilePage />} />
             <Route path="/customer/chat" element={<ChatbotPage />} />
