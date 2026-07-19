@@ -5,7 +5,8 @@ import toast from 'react-hot-toast';
 import { getTrip } from '@/services';
 import { SeatGrid } from '@/components';
 import type { Trip } from '@/types';
-
+import { useListenSocket } from '@/hooks';
+import socket from '@/services/socket.service';
 export function TripDetailPage() {
   const { tripId } = useParams<{ tripId: string }>();
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export function TripDetailPage() {
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
+  
   useEffect(() => {
     if (!tripId) return;
     getTrip(Number(tripId))
@@ -39,6 +41,16 @@ export function TripDetailPage() {
     }
     navigate(`/customer/trips/${tripId}/order?seats=${selectedIds.join(',')}`);
   }
+
+  useListenSocket(socket, "seatStatusChange",
+      (data: {seatId: number, oldStatus: string, newStatus: string})=>{
+        setTrip((prev:any) => {
+        return {
+          ...prev,
+          seats: prev?.seats.map((item:any)=>item.seatId ===data.seatId ?{...item,status: data.newStatus}:item)
+        }});
+      }
+    )
 
   if (loading) {
     return (

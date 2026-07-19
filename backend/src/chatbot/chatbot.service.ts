@@ -42,6 +42,9 @@ export class ChatBotService{
   }
     private readonly FILE_PATH= './src/chatbot/DOCUMENT.md';
     private readonly CURR_STATION= 'VN1000';
+
+    
+
     async chatBot(query: string){
         const trimmed = query.trim();
 
@@ -65,12 +68,13 @@ export class ChatBotService{
             return response2.toString();
             
           
-        }else if(trimmed.toLowerCase().startsWith('/makeorder')){
-          const subQuery = await this.subQuery.makeOrderQuery(query);
-          const response2 = (await queryEngine.query({query: subQuery}));
-          return response2.toString();
-
         }
+        //else if(trimmed.toLowerCase().startsWith('/makeorder')){
+        //  const subQuery = await this.subQuery.makeOrderQuery(query);
+        //  const response2 = (await queryEngine.query({query: subQuery}));
+        //  return response2.toString();
+
+        //}
 
         const response = await queryEngine.query({query: query});
         //const response = await retriever.retrieve({query: query})

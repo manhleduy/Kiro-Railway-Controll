@@ -1,3 +1,5 @@
+import { useListenSocket } from '@/hooks';
+import socket from '@/services/socket.service';
 import type { Seat } from '@/types';
 
 interface SeatGridProps {
@@ -14,6 +16,7 @@ const seatStatusStyles: Record<'Available' | 'Booked' | 'Unavailable', string> =
 };
 
 export function SeatGrid({ seats, selectedIds, onSelect }: SeatGridProps) {
+  
   const grouped = seats.reduce<Record<string, Seat[]>>((acc, seat) => {
     const key = seat.seatClass.name;
     if (!acc[key]) acc[key] = [];

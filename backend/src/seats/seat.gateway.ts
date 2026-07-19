@@ -30,7 +30,12 @@ export class SeatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * to broadcast real-time shifts immediately.
    */
   seatStatusUpdate(payload: { seat_id: string; old_state: string; new_state: string }) {
-    this.server.emit('seatStatusChanged', payload);
+    const returnVal ={
+        seatId: payload.seat_id,
+        oldStatus: payload.old_state,
+        newStatus: payload.new_state
+    }
+    this.server.emit('seatStatusChange', returnVal);
     
 }
 }
