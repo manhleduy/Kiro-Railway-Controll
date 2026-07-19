@@ -13,7 +13,7 @@ export class StationsService {
 
   findAll(): Promise<StationType[]> {
     return this.prisma.station.findMany({
-      include: { nextStations: true },
+      
     }) as Promise<StationType[]>;
   }
 
@@ -24,15 +24,8 @@ export class StationsService {
           stationId: input.stationId,
           name: input.name,
           location: input.location,
-          nextStations: input.nextStationIds?.length
-            ? {
-                connect: input.nextStationIds.map((id) => ({
-                  stationId: id,
-                })),
-              }
-            : undefined,
-        },
-        include: { nextStations: true },
+          
+        }
       });
       return station as StationType;
     } catch (err: unknown) {
@@ -67,8 +60,7 @@ export class StationsService {
 
     const station = await this.prisma.station.update({
       where: { stationId: id },
-      data,
-      include: { nextStations: true },
+      data
     });
     return station as StationType;
   }
