@@ -55,6 +55,7 @@ export class ChatBotService{
         console.log("Create embeddings...")
         const index = await VectorStoreIndex.fromDocuments(nodes);
         
+        
         const queryEngine = index.asQueryEngine();
         if (trimmed.toLowerCase().startsWith('/station')) {
             const queryForTarget = await  this.subQuery.findStationQuery(query);          
@@ -64,7 +65,7 @@ export class ChatBotService{
             return response2.toString();
             
           
-        }else if(trimmed.toLowerCase().startsWith('/station')){
+        }else if(trimmed.toLowerCase().startsWith('/makeorder')){
           const subQuery = await this.subQuery.makeOrderQuery(query);
           const response2 = (await queryEngine.query({query: subQuery}));
           return response2.toString();

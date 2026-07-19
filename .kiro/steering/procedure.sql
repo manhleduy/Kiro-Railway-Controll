@@ -254,3 +254,9 @@ create or replace trigger trg_updated_at_ticket
 after update on "Ticket"
 for each row
 execute function fn_update_timestamp();
+
+-- 2. Attach the trigger to your Seats table
+create or replace TRIGGER trg_seat_state_change
+AFTER UPDATE ON "Seat"
+FOR EACH ROW
+EXECUTE FUNCTION notify_seat_change();

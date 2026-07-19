@@ -54,8 +54,17 @@ export class ChatBotQuery{
                     }`
                 })
             }):
+            + ticketNumber(the ticket user want to buy):
 
-            
+            your answer is a json object with  the format like this without no additional words
+            *Note if user don't mention about one of these value remind them first:
+            {
+                "customerId": {customerId}
+                "method" : {method}
+                "ticketNumber": {ticketNumber}(only a number)
+            }
+
+
         `
     }
 }
