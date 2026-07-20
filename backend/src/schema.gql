@@ -191,6 +191,8 @@ type Mutation {
   deleteShift(shiftId: Int!): Boolean!
   createFeedback(customerId: String!, content: String!): FeedbackType!
   chatBot(query: String!): String!
+  stationSearch(query: SearchInput!): String!
+  stationConfirm(query: ReplyInput!): String!
 }
 
 input RegisterCustomerInput {
@@ -268,4 +270,14 @@ input CreateShiftInput {
   staffId: String!
   startTime: String!
   endTime: String!
+}
+
+input SearchInput {
+  userId: String
+  userQuery: String
+}
+
+input ReplyInput {
+  userId: String
+  userReply: String
 }

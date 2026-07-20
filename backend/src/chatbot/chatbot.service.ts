@@ -1,29 +1,31 @@
 import {Ollama, OllamaEmbedding} from "@llamaindex/ollama";
 import { Injectable } from "@nestjs/common";
-import { EngineResponse, Settings } from "llamaindex";
+import { EngineResponse, Settings} from "llamaindex";
 import {MarkdownReader} from "@llamaindex/readers/markdown";
 import {
     VectorStoreIndex,
-    Document, 
-    SentenceSplitter, 
     MarkdownNodeParser,
-    PromptTemplate,
-    TreeSummarizePrompt,
     FaithfulnessEvaluator,
     RelevancyEvaluator
 } from "llamaindex";
-import { Bm25Retriever } from "@llamaindex/bm25-retriever";
+
 import {Logger} from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
-import { Graph } from "./chatbot.graph";
+
 import { ChatBotQuery } from "./chatbot.query";
+
+
 
 @Injectable()
 export class ChatBotService{
   constructor(private readonly prisma: PrismaService,
     private readonly subQuery: ChatBotQuery
   ){}
-
+    private readonly  logger = new Logger(ChatBotService.name);
+    private readonly FILE_PATH= './src/chatbot/DOCUMENT.md';
+    private readonly CURR_STATION= 'VN1000';
+    
+  
     onModuleInit() {
     try {
       // Configure global LlamaIndex settings
@@ -40,11 +42,7 @@ export class ChatBotService{
       console.error('❌ Failed to configure LlamaIndex settings:', error);
     }
   }
-    private readonly FILE_PATH= './src/chatbot/DOCUMENT.md';
-    private readonly CURR_STATION= 'VN1000';
-
-    
-
+   
     async chatBot(query: string){
         const trimmed = query.trim();
 
@@ -67,7 +65,6 @@ export class ChatBotService{
 
             return response2.toString();
             
-          
         }
         //else if(trimmed.toLowerCase().startsWith('/makeorder')){
         //  const subQuery = await this.subQuery.makeOrderQuery(query);
@@ -82,6 +79,8 @@ export class ChatBotService{
         this.evaluation(query,response);
         return response.toString();
     }
+
+
   
     private async evaluation(query: string, response: EngineResponse) {
       
