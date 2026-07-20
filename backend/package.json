@@ -26,6 +26,7 @@
     "@llamaindex/ollama": "^0.1.23",
     "@llamaindex/openai": "^0.4.22",
     "@llamaindex/readers": "^3.1.21",
+    "@llamaindex/workflow": "^1.1.24",
     "@nestjs/apollo": "^13.4.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
@@ -53,7 +54,8 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket": "^1.1.143",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

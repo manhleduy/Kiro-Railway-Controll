@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, ChevronRight, Calendar } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Calendar, Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { myOrders } from '@/services';
 import { Badge } from '@/components';
@@ -56,13 +56,22 @@ export function OrdersListPage() {
             Review payment status, ticket counts, and booking details from a single clean dashboard.
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
-            Total orders
-          </p>
-          <p className="mt-1 text-lg font-semibold text-slate-900">
-            {orders.length}
-          </p>
+        <div className="flex flex-col gap-3">
+          <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
+              Total orders
+            </p>
+            <p className="mt-1 text-lg font-semibold text-slate-900">
+              {orders.length}
+            </p>
+          </div>
+          <Link
+            to="/customer/orders/new"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+          >
+            <Plus className="h-4 w-4" />
+            New order
+          </Link>
         </div>
       </div>
 
@@ -71,10 +80,10 @@ export function OrdersListPage() {
           <ShoppingBag className="mx-auto mb-3 h-12 w-12 opacity-30" />
           <p>No orders yet.</p>
           <Link
-            to="/customer/trips"
+            to="/customer/orders/new"
             className="mt-3 inline-flex items-center font-semibold text-sky-700 hover:text-sky-800"
           >
-            Browse trips
+            Start a new order
           </Link>
         </div>
       ) : (

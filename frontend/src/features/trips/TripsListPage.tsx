@@ -1,15 +1,17 @@
 import { useState, useEffect, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Train, Search, Calendar, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getTrips } from '@/services';
 import type { Trip, Seat } from '@/types';
 
 export function TripsListPage() {
+  const [searchParams] = useSearchParams();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [trackFilter, setTrackFilter] = useState('');
   const [inputValue, setInputValue] = useState('');
+  const ticketId = searchParams.get('ticketId');
 
   useEffect(() => {
     setLoading(true);
@@ -56,6 +58,20 @@ export function TripsListPage() {
           <p className="hero-copy mt-2">
             Explore routes, compare available seat classes, and move quickly from browsing to booking.
           </p>
+          {ticketId && (
+            <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              Pick a trip for ticket <span className="font-semibold">{ticketId}</span>.
+              Open any route to choose the seat next.
+              <div className="mt-2">
+                <Link
+                  to="/customer/orders/new"
+                  className="font-semibold text-amber-800 underline-offset-2 hover:underline"
+                >
+                  Cancel and return to order
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm text-slate-600 sm:grid-cols-3">
@@ -134,7 +150,7 @@ export function TripsListPage() {
           {trips.map((trip) => (
             <Link
               key={trip.tripId}
-              to={`/customer/trips/${trip.tripId}`}
+              to={`/customer/trips/${trip.tripId}${ticketId ? `?ticketId=${ticketId}` : ''}`}
               className="surface-card group p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_44px_rgba(15,23,42,0.12)]"
             >
               <div className="flex items-start justify-between">
@@ -167,6 +183,11 @@ export function TripsListPage() {
               <div className="mt-3 border-t border-slate-100 pt-3 text-xs text-slate-400">
                 {getAvailableCount(trip)} / {trip.seats.length} seats available
               </div>
+              {ticketId && (
+                <div className="mt-3 rounded-2xl bg-sky-50 px-3 py-2 text-xs font-medium text-sky-700">
+                  Select this trip for ticket {ticketId}
+                </div>
+              )}
             </Link>
           ))}
         </div>

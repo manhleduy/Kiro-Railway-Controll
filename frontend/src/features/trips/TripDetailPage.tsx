@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, Train, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getTrip } from '@/services';
 import { SeatGrid } from '@/components';
 import type { Trip } from '@/types';
 import { useListenSocket } from '@/hooks';
+import { store, updateOrderTicket } from '@/store';
 import socket from '@/services/socket.service';
 export function TripDetailPage() {
   const { tripId } = useParams<{ tripId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const ticketId = searchParams.get('ticketId');
+  const pickerMode = Boolean(ticketId);
 
   
   useEffect(() => {
@@ -27,6 +31,11 @@ export function TripDetailPage() {
   }, [tripId]);
 
   function handleSelect(seatId: number) {
+    if (pickerMode) {
+      setSelectedIds([seatId]);
+      return;
+    }
+
     setSelectedIds((prev) =>
       prev.includes(seatId)
         ? prev.filter((id) => id !== seatId)
@@ -35,11 +44,29 @@ export function TripDetailPage() {
   }
 
   function handleBook() {
+    if (pickerMode) {
+      if (!ticketId) return;
+      if (selectedIds.length !== 1) {
+        toast.error('Please select one seat');
+        return;
+      }
+
+      store.dispatch(
+        updateOrderTicket(ticketId, {
+          tripId: Number(tripId),
+          seatId: selectedIds[0],
+        }),
+      );
+      toast.success('Ticket updated');
+      navigate('/customer/orders/new');
+      return;
+    }
+
     if (selectedIds.length === 0) {
       toast.error('Please select at least one seat');
       return;
     }
-    navigate(`/customer/trips/${tripId}/order?seats=${selectedIds.join(',')}`);
+    navigate(`/customer/orders/new?tripId=${tripId}&seats=${selectedIds.join(',')}`);
   }
 
   useListenSocket(socket, "seatStatusChange",
@@ -100,6 +127,12 @@ export function TripDetailPage() {
               <Calendar className="h-4 w-4" />
               Arrival: {new Date(trip.arrivalDate).toLocaleString()}
             </div>
+            {pickerMode && (
+              <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                Select one seat for ticket <span className="font-semibold">{ticketId}</span>,
+                then confirm to return to the order builder.
+              </div>
+            )}
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-right">
             <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
@@ -134,10 +167,12 @@ export function TripDetailPage() {
       {selectedIds.length > 0 && (
         <div className="surface-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-medium text-slate-800">
-            {selectedIds.length} seat{selectedIds.length > 1 ? 's' : ''} selected
+            {pickerMode
+              ? `Seat ${selectedIds[0]} selected`
+              : `${selectedIds.length} seat${selectedIds.length > 1 ? 's' : ''} selected`}
           </p>
           <button onClick={handleBook} className="button-primary">
-            Book Selected Seats
+            {pickerMode ? 'Use selected seat' : 'Book Selected Seats'}
           </button>
         </div>
       )}

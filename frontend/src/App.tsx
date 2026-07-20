@@ -31,6 +31,7 @@ export default function App() {
         {/* Customer protected routes */}
         <Route element={<CustomerGuard />}>
           <Route element={<CustomerLayout />}>
+            <Route path="/customer/orders/new" element={<CreateOrderPage />} />
             <Route path="/customer/trips" element={<TripsListPage />} />
             <Route path="/customer/trips/:tripId" element={<TripDetailPage />} />
             <Route
