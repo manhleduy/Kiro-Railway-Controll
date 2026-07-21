@@ -3,9 +3,11 @@ import { IsOptional, IsNotEmpty } from 'class-validator';
 
 @InputType()
 export class SearchInput {
-  @Field({ nullable: true })
+  @Field()
+  @IsNotEmpty()
   userId: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsNotEmpty()
   userQuery: string;
 }

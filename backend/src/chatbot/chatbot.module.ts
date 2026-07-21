@@ -4,7 +4,14 @@ import { ChatBotResolver } from './chatbot.resolver';
 import { ChatBotService } from './chatbot.service';
 import { ChatBotQuery } from './chatbot.query';
 import { StationWorkflowService } from './station.workflow.service';
+import { MakeOrderWorkFlowService } from './makeorder.workflow.service';
 @Module({
-  providers: [ChatBotResolver, ChatBotService, ChatBotQuery, StationWorkflowService],
+  providers: [
+    ChatBotResolver, 
+    ChatBotService, 
+    ChatBotQuery, 
+    StationWorkflowService,
+    MakeOrderWorkFlowService
+  ],
 })
 export class ChatBotModule {}

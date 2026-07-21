@@ -37,34 +37,5 @@ export class ChatBotQuery{
             `
     }
     
-    async makeOrderQuery(query: string){
-        const methods = await this.prisma.method.findMany()
-
-        return `
-            you are an AI agent which can help our customer,
-            you can help based on the user query which is 
-            ${query} your have to determine the: 
-            + customerId: 
-            + method(find on the list
-            ${
-                methods.map((e)=>{
-                    `{
-                    methods: ${e.name}
-                    description: ${e.description}
-                    }`
-                })
-            }):
-            + ticketNumber(the ticket user want to buy):
-
-            your answer is a json object with  the format like this without no additional words
-            *Note if user don't mention about one of these value remind them first:
-            {
-                "customerId": {customerId}
-                "method" : {method}
-                "ticketNumber": {ticketNumber}(only a number)
-            }
-
-
-        `
-    }
+    
 }

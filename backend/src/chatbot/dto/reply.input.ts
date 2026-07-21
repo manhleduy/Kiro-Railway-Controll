@@ -3,9 +3,11 @@ import { IsOptional, IsNotEmpty } from 'class-validator';
 
 @InputType()
 export class ReplyInput {
-  @Field({ nullable: true })
+  @Field()
+  @IsNotEmpty()
   userId: string;
 
-  @Field({ nullable: true })
+  @Field()
+  @IsNotEmpty()
   userReply: string;
 }

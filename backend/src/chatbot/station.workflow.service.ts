@@ -30,6 +30,7 @@ export class StationWorkflowService{
   async processInitialQuery(userId: string, userQuery: string) {
     const dbStations = await this.prisma.station.findMany();
     this.logger.log(`[Turn 1 - Ollama] Processing query: "${userQuery}"`);
+    
 
     // Structured Prompt for Llama 3.2
     const prompt = `
