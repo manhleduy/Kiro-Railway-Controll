@@ -20,9 +20,13 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { MethodsModule } from './methods/methods.module';
 import { ChatBotModule } from './chatbot/chatbot.module';
 import { PgModule } from './pg/pg.module';
-
+import { CacheModule } from '@nestjs/cache-manager'
 @Module({
   imports: [
+    CacheModule.register({
+      max: 100,
+      ttl: 0 
+    }),
     PrismaModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

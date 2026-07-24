@@ -7,8 +7,11 @@ export class PrismaService
   extends PrismaClient 
   implements OnModuleInit, OnModuleDestroy {
   constructor(){
+    const url = process.env["ENVIRONMENT"] ==='production'? 
+    process.env["DATABASE_URL"]: 
+    "postgresql://postgres:lem%4019072006@localhost:5432/railwaycontroll?schema=public"
     const adapter = new PrismaPg({
-      connectionString: process.env["DATABASE_URL"] as string, 
+      connectionString:  url
     
     });
     super({adapter});

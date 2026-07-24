@@ -1,0 +1,52 @@
+services:
+
+  database-postgres:
+      image: postgres:16.1
+      restart: unless-stopped
+      environment:
+        - POSTGRES_DB=railway-controll
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=lem@19072006
+      ports:
+        - '5435:5432'
+      expose:
+        - 5432
+      volumes:
+        - railway-controll:/var/lib/postgresql/data
+  redis:
+    image: redis:latest
+    container_name: railway_station_redis
+    ports:
+      - "6336:6379"
+    expose:
+      - 6379
+    restart: unless-stopped
+    command: redis-server --save
+    volumes:
+      - railway-controll:/data
+    networks:
+      - default
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../backend/.env
+
+    ports: 
+      - 8088:8080
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 5173:5173
+    env_file:
+      - ../frontend/.env
+  
+volumes:
+    railway-controll:
+  
+  

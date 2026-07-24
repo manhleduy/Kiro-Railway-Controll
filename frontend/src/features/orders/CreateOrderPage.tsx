@@ -80,6 +80,7 @@ export function CreateOrderPage() {
     store.dispatch(
       replaceOrderDraft({
         tickets: seatIdsFromQuery.map((seatId) => ({
+          id: undefined as any,
           tripId,
           seatId,
           passName: '',

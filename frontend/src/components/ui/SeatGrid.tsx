@@ -1,5 +1,3 @@
-import { useListenSocket } from '@/hooks';
-import socket from '@/services/socket.service';
 import type { Seat } from '@/types';
 
 interface SeatGridProps {

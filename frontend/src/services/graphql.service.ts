@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { store } from '@/store';
 
+const baseURL = import.meta.env['ENVIRONMENT']==='production' ?
+ (import.meta.env['VITE_API_URL'] as string | undefined)  ?? 'http://localhost:8088':
+ 'http://localhost:3000'
+ 
 const client = axios.create({
-  baseURL:
-    (import.meta.env['VITE_API_URL'] as string | undefined) ??
-    'http://localhost:3000',
+  baseURL:baseURL,
 });
 
 client.interceptors.request.use((config) => {

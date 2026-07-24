@@ -14,8 +14,14 @@ export class PgListenerService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     // 1. Initialize a standalone Postgres Client bypassing the Prisma pooler
+    const url = process.env["ENVIRONMENT"] ==='production'? 
+                process.env["DATABASE_URL"]: 
+                'postgresql://postgres:lem%4019072006@localhost:5432/railwaycontroll?schema=public'
+
+      
+    console.log(url)
     this.pgClient = new Client({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: url,
     });
 
     await this.connectAndListen();

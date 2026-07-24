@@ -3,12 +3,16 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+const url = process.env["ENVIRONMENT"] ==='production'? 
+process.env["DATABASE_URL"]: 
+"postgresql://postgres:lem%4019072006@localhost:5432/railwaystation?schema=public"
+console.log(url)
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: url,
   },
 });
