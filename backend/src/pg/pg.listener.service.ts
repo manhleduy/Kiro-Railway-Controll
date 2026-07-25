@@ -19,7 +19,6 @@ export class PgListenerService implements OnModuleInit, OnModuleDestroy {
                 'postgresql://postgres:lem%4019072006@localhost:5432/railwaycontroll?schema=public'
 
       
-    console.log(url)
     this.pgClient = new Client({
       connectionString: url,
     });

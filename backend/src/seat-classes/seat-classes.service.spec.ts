@@ -1,144 +1,144 @@
-/**
- * Feature: railway-control-system
- * SeatClasses service — property-based tests (Property 21)
- *
- * Property 21: SeatClass price boundary
- * Validates: Requirements 15.2, 15.3
- */
-
-import * as fc from 'fast-check';
-import { SeatClassesService } from './seat-classes.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
+import { SeatClassesService } from './seat-classes.service';
 
-function makeService(
-  overrides?: Partial<PrismaService['seatClass']>,
-): SeatClassesService {
-  const prismaStub = {
+describe('SeatClassesService', () => {
+  let service: SeatClassesService;
+  let prismaService: PrismaService;
+
+  const mockSeatClassData = {
+    seatClassId: 1,
+    name: 'Economy',
+    price: 50000,
+  };
+
+  const mockSeatClassesData = [
+    { seatClassId: 1, name: 'Economy', price: 50000 },
+    { seatClassId: 2, name: 'Business', price: 100000 },
+    { seatClassId: 3, name: 'First Class', price: 150000 },
+  ];
+
+  const mockPrismaService = {
     seatClass: {
-      findMany: async () => [],
-      create: async (args: { data: { name: string; price: number } }) => ({
-        seatClassId: 1,
-        name: args.data.name,
-        price: args.data.price,
-      }),
-      update: async (args: {
-        where: { seatClassId: number };
-        data: { name?: string; price?: number };
-      }) => ({
-        seatClassId: args.where.seatClassId,
-        name: args.data.name ?? 'unchanged',
-        price: args.data.price ?? 100,
-      }),
-      ...overrides,
+      findMany: jest.fn().mockResolvedValue(mockSeatClassesData),
+      create: jest.fn().mockResolvedValue(mockSeatClassData),
+      update: jest.fn().mockResolvedValue(mockSeatClassData),
     },
-  } as unknown as PrismaService;
-  return new SeatClassesService(prismaStub);
-}
+  };
 
-// ---------------------------------------------------------------------------
-// Property 21: SeatClass price boundary
-// Validates: Requirements 15.2, 15.3
-// ---------------------------------------------------------------------------
-describe('SeatClassesService — property tests', () => {
-  it.skip('Property 21: SeatClass price boundary — invalid prices rejected (live DB)', async () => {
-    // Requires live DB — verifies class-validator @Min(0.01) rejects price ≤ 0
-    const service = null as unknown as SeatClassesService;
-
-    await fc.assert(
-      fc.asyncProperty(
-        fc.record({
-          name: fc.string({ minLength: 1, maxLength: 50 }),
-          price: fc.float({ min: 0.01, max: 1_000_000, noNaN: true }),
-        }),
-        async (input) => {
-          const result = await service.create(input);
-          expect(result.name).toBe(input.name);
-          expect(result.price).toBe(input.price);
-          expect(result.seatClassId).toBeGreaterThan(0);
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        SeatClassesService,
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
         },
-      ),
-      { numRuns: 10 },
-    );
+      ],
+    }).compile();
+
+    service = module.get<SeatClassesService>(SeatClassesService);
+    prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  it('Property 21 (pure): valid price values (> 0) are accepted by service', async () => {
-    const service = makeService();
-
-    await fc.assert(
-      fc.asyncProperty(
-        fc.record({
-          name: fc.string({ minLength: 1, maxLength: 50 }),
-          price: fc.float({ min: 0.01, max: 999_999, noNaN: true }),
-        }),
-        async (input) => {
-          // Service itself does not validate price — validation is at DTO layer.
-          // Verify the created record echoes back the submitted price and name.
-          const result = await service.create(input);
-          expect(result.price).toBe(input.price);
-          expect(result.name).toBe(input.name);
-        },
-      ),
-      { numRuns: 20 },
-    );
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('Property 21 (pure): update preserves only provided fields', async () => {
-    const service = makeService();
-
-    await fc.assert(
-      fc.asyncProperty(
-        fc.record({
-          id: fc.integer({ min: 1, max: 1000 }),
-          name: fc.option(fc.string({ minLength: 1, maxLength: 50 }), {
-            nil: undefined,
-          }),
-          price: fc.option(
-            fc.float({ min: 0.01, max: 999_999, noNaN: true }),
-            { nil: undefined },
-          ),
-        }),
-        async ({ id, name, price }) => {
-          const input: { name?: string; price?: number } = {};
-          if (name !== undefined) input.name = name;
-          if (price !== undefined) input.price = price;
-
-          const data: { name?: string; price?: number } = {};
-          if (input.name !== undefined) data.name = input.name;
-          if (input.price !== undefined) data.price = input.price;
-
-          // data object must never contain updatedAt
-          expect(Object.keys(data)).not.toContain('updatedAt');
-
-          // price key, if present, must be a positive number
-          if ('price' in data) {
-            expect(data.price).toBeGreaterThan(0);
-          }
-        },
-      ),
-      { numRuns: 30 },
-    );
+  it('should be defined', () => {
+    expect(service).toBeDefined();
   });
 
-  it('Property 21 (pure): price boundary — zero and negative prices should be rejected at DTO layer', () => {
-    fc.assert(
-      fc.property(
-        fc.oneof(
-          fc.constant(0),
-          fc.float({ min: -100_000, max: -0.001, noNaN: true }),
-        ),
-        (invalidPrice) => {
-          // Prices ≤ 0 must not be stored. The @Min(0.01) DTO validator handles
-          // this. We verify the boundary condition here structurally.
-          expect(invalidPrice).toBeLessThanOrEqual(0);
-        },
-      ),
-      { numRuns: 50 },
-    );
+  describe('findAll', () => {
+    it('should return all seat classes', async () => {
+      const result = await service.findAll();
+
+      expect(prismaService.seatClass.findMany).toHaveBeenCalled();
+      expect(result).toEqual(mockSeatClassesData);
+      expect(result.length).toBe(3);
+    });
+
+    it('should return empty array if no seat classes exist', async () => {
+      (prismaService.seatClass.findMany as jest.Mock).mockResolvedValue([]);
+
+      const result = await service.findAll();
+
+      expect(result).toEqual([]);
+    });
   });
 
-  it('SeatClassesService.findAll returns an array', async () => {
-    const service = makeService();
-    const result = await service.findAll();
-    expect(Array.isArray(result)).toBe(true);
+  describe('create', () => {
+    it('should create a new seat class', async () => {
+      const createInput = { name: 'Economy', price: 50000 };
+
+      const result = await service.create(createInput);
+
+      expect(prismaService.seatClass.create).toHaveBeenCalledWith({
+        data: createInput,
+      });
+      expect(result).toEqual(mockSeatClassData);
+    });
+
+    it('should return created seat class with correct properties', async () => {
+      const createInput = { name: 'Business', price: 100000 };
+
+      const result = await service.create(createInput);
+
+      expect(result).toHaveProperty('seatClassId');
+      expect(result).toHaveProperty('name');
+      expect(result).toHaveProperty('price');
+    });
+  });
+
+  describe('update', () => {
+    it('should update a seat class successfully', async () => {
+      const id = 1;
+      const updateInput = { name: 'Economy Plus', price: 75000 };
+
+      const result = await service.update(id, updateInput);
+
+      expect(prismaService.seatClass.update).toHaveBeenCalledWith({
+        where: { seatClassId: id },
+        data: updateInput,
+      });
+      expect(result).toEqual(mockSeatClassData);
+    });
+
+    it('should update only name when price is not provided', async () => {
+      const id = 1;
+      const updateInput = { name: 'Economy Plus' };
+
+      await service.update(id, updateInput);
+
+      expect(prismaService.seatClass.update).toHaveBeenCalledWith({
+        where: { seatClassId: id },
+        data: { name: 'Economy Plus' },
+      });
+    });
+
+    it('should update only price when name is not provided', async () => {
+      const id = 1;
+      const updateInput = { price: 75000 };
+
+      await service.update(id, updateInput);
+
+      expect(prismaService.seatClass.update).toHaveBeenCalledWith({
+        where: { seatClassId: id },
+        data: { price: 75000 },
+      });
+    });
+
+    it('should not include undefined values in update data', async () => {
+      const id = 1;
+      const updateInput = { name: 'Economy' };
+
+      await service.update(id, updateInput);
+
+      const callArgs = (prismaService.seatClass.update as jest.Mock).mock
+        .calls[0][0];
+      expect(callArgs.data).not.toHaveProperty('price');
+    });
   });
 });
+
+
