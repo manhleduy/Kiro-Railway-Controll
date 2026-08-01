@@ -12,15 +12,14 @@ export class TripsResolver {
 
   @Query(() => [TripType], { name: 'trips' })
   findAll(
+    @Args('stationName', { type: () => String, nullable: true }) stationName?: string,
     @Args('track', { type: () => String, nullable: true }) track?: string,
   ): Promise<TripType[]> {
-    return this.tripsService.findAll(track);
+    return this.tripsService.findAll(stationName, track);
   }
 
   @Query(() => TripType, { name: 'trip', nullable: true })
-  findOne(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<TripType | null> {
+  findOne(@Args('id', { type: () => Int }) id: number): Promise<TripType | null> {
     return this.tripsService.findOne(id);
   }
 
@@ -32,9 +31,7 @@ export class TripsResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  deleteTrip(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<boolean> {
+  deleteTrip(@Args('id', { type: () => Int }) id: number): Promise<boolean> {
     return this.tripsService.delete(id);
   }
 }

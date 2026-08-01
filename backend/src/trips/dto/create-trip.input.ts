@@ -1,5 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { InputType, Field, Int } from '@nestjs/graphql';
+import { IsNotEmpty, IsOptional, Min } from 'class-validator';
 
 @InputType()
 export class CreateTripInput {
@@ -9,4 +9,13 @@ export class CreateTripInput {
 
   @Field()
   arrivalDate: Date;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  stationId?: string;
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @Min(1)
+  travelTime?: number;
 }

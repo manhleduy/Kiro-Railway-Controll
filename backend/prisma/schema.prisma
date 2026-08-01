@@ -124,10 +124,11 @@ model Seat {
 model Trip {
   tripId      Int      @id @default(autoincrement())
   track       String
-  arrivalDate DateTime 
+  arrivalDate DateTime
   stationId   String?
   seats       Seat[]
-  station     Station?  @relation(fields: [stationId], references: [stationId])
+  station     Station? @relation(fields: [stationId], references: [stationId])
+  route       Route?
 }
 
 model SeatClass {
@@ -158,8 +159,9 @@ model StationConnection{
   endStationId         String
   
 }
-model Route{
-  routeId     Int     @id @default(autoincrement())
-  tripId      Int
-  travelTime  Int    //in minutes
+model Route {
+  routeId    Int  @id @default(autoincrement())
+  tripId     Int  @unique
+  travelTime Int  // in minutes
+  trip       Trip @relation(fields: [tripId], references: [tripId], onDelete: Cascade)
 }

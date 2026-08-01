@@ -36,13 +36,6 @@ export interface Seat {
   seatClass: SeatClass;
 }
 
-export interface Trip {
-  tripId: number;
-  track: string;
-  arrivalDate: string;
-  seats: Seat[];
-}
-
 export interface Method {
   methodId: number;
   name: string;
@@ -80,6 +73,22 @@ export interface Station {
   name: string;
   location: string;
   nextStations: Station[];
+}
+
+export interface Route {
+  routeId: number;
+  tripId: number;
+  travelTime: number; // minutes
+}
+
+export interface Trip {
+  tripId: number;
+  track: string;
+  arrivalDate: string;
+  stationId: string | null;
+  station: Station | null;
+  route: Route | null;
+  seats: Seat[];
 }
 
 export interface Feedback {

@@ -84,10 +84,26 @@ enum SeatStatus {
   Unavailable
 }
 
+type RouteType {
+  routeId: Int!
+  tripId: Int!
+  travelTime: Int!
+}
+
+type StationType {
+  stationId: String!
+  name: String!
+  location: String!
+  nextStations: [StationType!]!
+}
+
 type TripType {
   tripId: Int!
   track: String!
   arrivalDate: DateTime!
+  stationId: String
+  station: StationType
+  route: RouteType
   seats: [SeatType!]!
 }
 
@@ -129,13 +145,6 @@ type OrderType {
   payment: PaymentType
 }
 
-type StationType {
-  stationId: String!
-  name: String!
-  location: String!
-  nextStations: [StationType!]!
-}
-
 type ShiftType {
   shiftId: Int!
   staffId: String!
@@ -154,7 +163,7 @@ type Query {
   customer(id: String!): AuthCustomerProfile!
   customerStats(id: String!, year: Int!): CustomerStatsType!
   staff(id: String!): StaffProfile!
-  trips(track: String): [TripType!]!
+  trips(stationName: String, track: String): [TripType!]!
   trip(id: Int!): TripType
   seatClasses: [SeatClassType!]!
   myOrders(customerId: String!): [OrderType!]!
@@ -226,6 +235,8 @@ input ChangePasswordInput {
 input CreateTripInput {
   track: String!
   arrivalDate: DateTime!
+  stationId: String
+  travelTime: Int
 }
 
 input CreateSeatInput {

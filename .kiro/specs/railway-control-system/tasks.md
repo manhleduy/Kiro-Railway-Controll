@@ -469,7 +469,22 @@ Full-stack implementation of the Railway Control System — a NestJS 11 GraphQL 
     - Add a "Chat" nav link (bot icon) to both `CustomerLayout` and `StaffLayout`
   - _Requirements: Product spec — ease of use, understandable interface_
 
-- [ ] 22. Final checkpoint — verify full build (backend + frontend)
+- [ ] 24. Station / Route / Trip schema alignment
+  - [x] 24.1 Fix schema.prisma — add `Route→Trip` FK (`@unique tripId`, cascade delete) and `Trip.route?` back-relation
+  - [x] 24.2 Regenerate Prisma client after schema change
+  - [x] 24.3 Add `RouteType` `@ObjectType()` in `backend/src/trips/dto/route.type.ts`
+  - [x] 24.4 Update `TripType` — add `stationId?`, `station?: StationType`, `route?: RouteType`
+  - [x] 24.5 Update `CreateTripInput` — add optional `stationId?: String` and `travelTime?: Int` (`@Min(1)`)
+  - [x] 24.6 Update `TripsService` — include `station` and `route` in all queries; create `Route` record in `create()` when `travelTime` is provided; `findAll` accepts new `stationName` filter (case-insensitive contains on `station.name`)
+  - [x] 24.7 Update `TripsResolver` — expose `stationName?: String` arg on `trips` query
+  - [x] 24.8 Update frontend `api.types.ts` — add `Route` interface, update `Trip` with `stationId`, `station`, `route` fields
+  - [x] 24.9 Update frontend `trips.service.ts` — include station+route in GraphQL fragment; update `getTrips(stationName?, track?)` and `createTrip(track, arrivalDate, stationId?, travelTime?)` signatures
+  - [x] 24.10 Update `TripsListPage` — replace track filter with **station name** filter per product spec §4; show station badge and travel time on trip cards
+  - [x] 24.11 Update `TripDetailPage` — show station name/location and travel time in the header card
+  - [x] 24.12 Update `StaffTripsPage` — add `stationId` and `travelTime` optional fields to create form; show station/route info on trip cards
+  - _Requirements: Product spec §4 (See the Incoming Trip), §3 (Make an Order)_
+
+- [~] 22. Final checkpoint — verify full build (backend + frontend)
   - Run `npm run build` in `backend/` and confirm no TypeScript errors
   - Run `npm run build` in `frontend/` and confirm no TypeScript errors
   - Run `npm run test` in `backend/` and confirm all unit and property tests pass
