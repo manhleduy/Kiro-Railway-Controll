@@ -62,6 +62,22 @@ A railway management platform for booking and operations management in the railw
     - The user also have the profile page so you must distinguish between the customer profile page and staff profile page
     - reusable the code
 
+### 8.Chatbot (Priority: Very High)
+* **Customer Story:** i want to ask the chat bot about how to use all features of this web
+* **Functional Requirement**
+    - a chatbot which can help user or can suggest user with these features, split onto two type of customer and staff
+    - Wires together: Security pipeline (input sanitization, PII masking) -> Response caching -> Rate limit(redis)
+    - every this composed on the backend/src/chatbot
+    - testing with jess
+    - rewrite the Document.md file on the backend/src/chatbot folder
+    
+* **Acceptance Criteria:**
+    - user can easily chat with bot, the bot will actively suggest user to ask about the available features
+    
+* **Note:**
+    - makeorder workflow: automatically determine the information about the trip and seat user want to choose and waiting them for accept to naviagate them to the order page with an available order whose information is filled
+    - station workflow: automatically determine the information about the station user want to go to and waiting for them to accept to naviage them to the station page
+
 ###
 
 

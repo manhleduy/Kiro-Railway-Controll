@@ -6,6 +6,9 @@
 - **Framework**: NestJS 11 (modular, decorator-based)
 - **API**: GraphQL via `@nestjs/graphql` + Apollo Driver (code-first, auto-schema generation to `src/schema.gql`)
 - **ORM**: Prisma 7 with `prisma-client` generator; client output at `src/generated/client`
+- **Real time**: Socket io
+- **Testing**: jest, mainly testing the service
+- **Ai agent**: llamaindex, split into two environment, development will use the ollama local model, production will use the groq free model
 - **Database adapter**: `@prisma/adapter-pg` (PostgreSQL via `PrismaPg`)
 - **Database**: PostgreSQL (connection string in `backend/.env` as `DATABASE_URL`)
 - **Auth utilities**: `bcryptjs` for password hashing
@@ -25,6 +28,9 @@
 - **Charts**: Recharts
 - **Icons**: Lucide React
 - **Notifications**: React Hot Toast
+
+## Docker
+
 
 ## Common Commands
 
@@ -98,6 +104,7 @@ npm run lint
     - root module: app.module.ts
     - features specific modules : `backend/src/modules
     - Decorators, filters, guards, interceptors, pipes: `backend/src/commons
+    - Testings: `backend/src/spec
     - Configuration files: `backend/src/configs
     - utiilty: functions: `backend/src/ utils
     - 
