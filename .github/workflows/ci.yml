@@ -1,0 +1,252 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# Railway Control — CI Pipeline
+#
+# Jobs:
+#   changes        – path filtering (skip jobs when nothing relevant changed)
+#   backend-ci     – dependency cache · build · lint + typecheck · jest tests
+#                    · coverage upload · dist artifact
+#   frontend-ci    – dependency cache · build · lint + typecheck · dist artifact
+#
+# Required repository secrets (Settings → Secrets → Actions):
+#   DATABASE_URL   – PostgreSQL connection string for the test database
+#   JWT_SECRET     – JWT signing secret used by the backend
+#   SMTP_HOST      – SMTP host for nodemailer (can be a dummy value in CI)
+#   SMTP_PORT      – SMTP port
+#   SMTP_USER      – SMTP username
+#   SMTP_PASS      – SMTP password
+#
+# Optional:
+#   CODECOV_TOKEN  – Enables coverage upload to codecov.io
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+# Cancel in-progress runs on the same branch when a new push arrives
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ─── Path-change detection ────────────────────────────────────────────────────
+jobs:
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend:  ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - '.github/workflows/ci.yml'
+            frontend:
+              - 'frontend/**'
+              - '.github/workflows/ci.yml'
+
+# ─── Backend CI ───────────────────────────────────────────────────────────────
+  backend-ci:
+    name: Backend — Build / Lint / Test
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Node.js setup ─────────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── 3. Dependency cache ──────────────────────────────────────────────────
+      # Cache key is scoped to the OS + lockfile so a lockfile change busts it.
+      - name: Cache backend node_modules
+        uses: actions/cache@v4
+        id: backend-cache
+        with:
+          path: backend/node_modules
+          key: backend-node-${{ runner.os }}-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            backend-node-${{ runner.os }}-
+
+      # ── 4. Install (only when cache miss) ───────────────────────────────────
+      - name: Install dependencies
+        if: steps.backend-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      # ── 5. Generate Prisma client ─────────────────────────────────────────
+      # Must run after install so the generated client is available for tsc.
+      # Does NOT run migrations — CI uses the generated client stubs only.
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      # ── 6. TypeScript build verification ────────────────────────────────────
+      - name: Build (nest build)
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      # ── 7. Lint + Prettier ───────────────────────────────────────────────────
+      # eslint.config.mjs uses typescript-eslint with type-checked rules.
+      # Pass --max-warnings 0 so any warning also fails the job.
+      - name: Lint
+        run: npx eslint "{src,test}/**/*.ts" --max-warnings 0
+
+      # ── 8. Type safety check (standalone tsc, no emit) ───────────────────────
+      # nest build already type-checks, but this step runs tsc directly so
+      # the output clearly names any type errors separate from build errors.
+      - name: TypeScript strict check
+        run: npx tsc --noEmit --strict
+
+      # ── 9. Unit + property tests ─────────────────────────────────────────────
+      # Jest config is inlined in package.json:
+      #   rootDir: src  |  testRegex: *.spec.ts  |  transform: ts-jest
+      # Tests marked it.skip (require a live DB) are automatically skipped.
+      - name: Run Jest tests with coverage
+        run: npm run test:cov -- --ci --forceExit
+        env:
+          NODE_ENV: test
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET:   ${{ secrets.JWT_SECRET }}
+          SMTP_HOST:    ${{ secrets.SMTP_HOST }}
+          SMTP_PORT:    ${{ secrets.SMTP_PORT }}
+          SMTP_USER:    ${{ secrets.SMTP_USER }}
+          SMTP_PASS:    ${{ secrets.SMTP_PASS }}
+
+      # ── 10. Upload coverage to Codecov (optional) ────────────────────────────
+      - name: Upload coverage
+        if: ${{ always() && env.CODECOV_TOKEN != '' }}
+        uses: codecov/codecov-action@v4
+        with:
+          directory: backend/coverage
+          flags: backend
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      # ── 11. Upload dist artifact ─────────────────────────────────────────────
+      # Retained for 7 days so downstream jobs (e.g., deploy) can download it.
+      - name: Upload backend dist artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist-${{ github.sha }}
+          path: backend/dist
+          retention-days: 7
+
+      # ── 12. Upload coverage report artifact ──────────────────────────────────
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-${{ github.sha }}
+          path: backend/coverage
+          retention-days: 7
+
+# ─── Frontend CI ──────────────────────────────────────────────────────────────
+  frontend-ci:
+    name: Frontend — Build / Lint / Typecheck
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Node.js setup ─────────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── 3. Dependency cache ──────────────────────────────────────────────────
+      - name: Cache frontend node_modules
+        uses: actions/cache@v4
+        id: frontend-cache
+        with:
+          path: frontend/node_modules
+          key: frontend-node-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            frontend-node-${{ runner.os }}-
+
+      # ── 4. Install ───────────────────────────────────────────────────────────
+      - name: Install dependencies
+        if: steps.frontend-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      # ── 5. TypeScript type check ─────────────────────────────────────────────
+      # tsconfig.app.json has noUnusedLocals, noUnusedParameters, verbatimModuleSyntax.
+      # tsc -b runs the composite build which covers all tsconfig files.
+      - name: TypeScript type check (tsc -b)
+        run: npx tsc -b --noEmit
+
+      # ── 6. Lint ───────────────────────────────────────────────────────────────
+      # eslint.config.js uses typescript-eslint + react-hooks + react-refresh.
+      - name: Lint
+        run: npm run lint -- --max-warnings 0
+
+      # ── 7. Vite production build ──────────────────────────────────────────────
+      # Runs tsc -b again internally then Vite's rolldown bundler.
+      # If this passes, the bundle is deployable.
+      - name: Build (vite build)
+        run: npm run build
+        env:
+          VITE_API_URL: http://localhost:3000
+
+      # ── 8. Upload dist artifact ───────────────────────────────────────────────
+      - name: Upload frontend dist artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist-${{ github.sha }}
+          path: frontend/dist
+          retention-days: 7
+
+# ─── Summary gate ─────────────────────────────────────────────────────────────
+# This job runs after both CI jobs (or is skipped if neither ran).
+# Use it as the required status check in branch protection rules —
+# it always passes as long as every triggered job passed.
+  ci-passed:
+    name: CI passed
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+    # Run even when upstream jobs are skipped (path filter short-circuit)
+    if: always()
+    steps:
+      - name: Check all jobs
+        run: |
+          results="${{ needs.backend-ci.result }} ${{ needs.frontend-ci.result }}"
+          echo "Job results: $results"
+          for result in $results; do
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
+              echo "Job failed with result: $result"
+              exit 1
+            fi
+          done
+          echo "All jobs passed or were intentionally skipped."
