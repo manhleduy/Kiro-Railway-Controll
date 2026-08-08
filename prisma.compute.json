@@ -1,0 +1,13 @@
+{
+  "region": "ap-southeast-1",
+  "app": {
+    "name": "backend",
+    "root": "backend",
+    "framework": "nestjs",
+    "httpPort": 3000,
+    "build": {
+      "command": "npm run build",
+      "outputDirectory": "dist"
+    }
+  }
+}
