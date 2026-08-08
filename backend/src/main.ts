@@ -9,7 +9,10 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-  const PORT = process.env["ENVIROMENT"] ==='production'? process.env["PORT"] : '3000'
-  await app.listen(PORT ?? 3000,'0.0.0.0');
+  const PORT = process.env["ENVIRONMENT"] ==='production'? process.env["PORT"] : '3000'
+
+  await app.listen(PORT ?? 3000, "0.0.0.0", () => {
+  console.log(`Listening on 0.0.0.0:${PORT}`);
+});
 }
 bootstrap();
